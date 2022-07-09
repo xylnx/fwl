@@ -109,15 +109,12 @@ svg {
 }
 
 .header__lower {
-  /* position: fixed; */
   width: 100%;
-  top: 0;
-  z-index: -1;
   background-color: var(--clr-primary-400);
   padding: 2.4rem 0.8rem;
+  transition: all 0.5s;
 }
 
-/* combines lists or list items to a column of items */
 .items {
   margin-top: 1.6rem;
   display: grid;

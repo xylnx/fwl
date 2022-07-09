@@ -34,8 +34,7 @@ const templates = (function () {
     </div>
   </div>
 
-  <div class="header__lower">
-      <form>
+      <form class="header__lower">
         <label class="input__label">
           <span class="hidden">
             {%labelHeaderInput%}
@@ -44,7 +43,6 @@ const templates = (function () {
           <button type="button" class="btn input__submit">{%submitBtn%}</button>
         </label>
       </form>
-  </div>
   `;
 
   const list = `
