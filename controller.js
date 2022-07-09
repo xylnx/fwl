@@ -1,16 +1,14 @@
 const controller = (function () {
   const DOMStrings = {
     header: 'header',
+    headerLower: '.header__lower',
     main: 'main',
-    input: '.input input',
+    input: '.header__lower input',
     items: '.items',
   };
 
-  const handleAddBtn = () => {
-    console.log('Add btn');
-
-    // Create a list with a form field
-    // Apend this template
+  const handleAddBtn = (e) => {
+    view.toggleInput(DOMStrings, e.target);
   };
 
   const handleSubmit = () => {
@@ -38,7 +36,7 @@ const controller = (function () {
     const events = {
       click: function () {
         if (e.target.classList.contains('control__add')) {
-          handleAddBtn();
+          handleAddBtn(e);
         }
         if (e.target.classList.contains('input__submit')) {
           handleSubmit();

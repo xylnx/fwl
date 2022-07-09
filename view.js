@@ -7,6 +7,16 @@ const view = (function () {
     getElement(DOMString).innerHTML = '';
   };
 
+  const toggleInput = (DS, btnEl) => {
+    const headerLower = view.getElement(DS.headerLower);
+    headerLower.classList.toggle('active');
+    if (headerLower.classList.contains('active')) {
+      const input = view.getElement(DS.input).focus();
+      return;
+    }
+    btnEl.focus();
+  };
+
   /**
    * Generates HTML from a template and dynamic data.
    * @param {string} template - Generic HTML stored as a template string.
@@ -63,5 +73,6 @@ const view = (function () {
     generateHtml,
     renderLists,
     renderList,
+    toggleInput,
   };
 })();
