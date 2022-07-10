@@ -15,7 +15,7 @@ html {
 /* GENERAL STYLING */
 :root {
   --clr-primary-400: #333;
-  --clr-accent: #ab40d4;
+  --clr-accent: #f2f3f4;
   --clr-bg: #555;
   --clr-text-400: #f2f3f4;
 
@@ -69,11 +69,12 @@ svg {
 
 .input__input {
   flex: 1 1;
-  background-color: var(--clr-bg);
   padding: 0.5em;
   border: 0;
-  border: 2px solid var(--clr-primary-400);
+  border: 1px solid var(--clr-primary-400);
   border-radius: var(--border-radius);
+  background: #000;
+  color: var(--clr-text-400);
 }
 
 .input__label {
@@ -85,7 +86,7 @@ svg {
 
 .input__submit {
   color: var(--clr-primary-400);
-  border: 2px solid var(--clr-primary-400);
+  border: 1px solid var(--clr-primary-400);
   border-radius: var(--border-radius);
 }
 
@@ -128,6 +129,8 @@ svg {
 .header__brand {
   color: var(--clr-accent);
   font-size: var(--fs-800);
+  font-weight: 200;
+  letter-spacing: 4px;
 }
 
 .header__lower {
