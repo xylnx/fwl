@@ -9,8 +9,8 @@ const view = (function () {
 
   const toggleInput = (DS, btnEl) => {
     const headerLower = view.getElement(DS.headerLower);
-    headerLower.classList.toggle('active');
-    if (headerLower.classList.contains('active')) {
+    headerLower.classList.toggle('hidden');
+    if (!headerLower.classList.contains('hidden')) {
       const input = view.getElement(DS.input).focus();
       return;
     }
@@ -38,6 +38,10 @@ const view = (function () {
   const renderLists = (data) => {
     const { lists, DOMString } = data;
     clearView(DOMString);
+
+    // Hide go back to overview btn
+    getElement('.control__back-to-overview').classList.add('hidden');
+
     lists.map((list) => {
       console.log(list);
       const html = generateHtml(templates.list, {
@@ -50,8 +54,11 @@ const view = (function () {
 
   const renderList = (data) => {
     const { list, DOMString } = data;
-    console.log({ list });
+    console.log('renderList:', { list });
     clearView(DOMString);
+
+    // Go back to overview btn
+    getElement('.control__back-to-overview').classList.remove('hidden');
 
     // Check if there are any items in the list
     if (list.listItems === null) {
@@ -60,9 +67,10 @@ const view = (function () {
     }
     // Render existing items
     list.listItems.map((item) => {
-      const html = generateHtml(templates.list, {
-        listID: item.itemID,
-        listName: item.itemName,
+      const html = generateHtml(templates.listItem, {
+        itemID: item.itemID,
+        itemName: item.itemName,
+        isDone: item.isDone,
       });
       getElement(DOMString).insertAdjacentHTML('beforeend', html);
     });

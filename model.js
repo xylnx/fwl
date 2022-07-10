@@ -1,13 +1,13 @@
-// Data structure:
+// Data structureli:
 
 let listsExample = [
   {
     listID: '9999',
     listName: 'my list',
     listItems: [
-      { itemID: '1234', itemName: 'my item name 1', itemStatus: 0 },
-      { itemID: '1235', itemName: 'my item name 2', itemStatus: 0 },
-      { itemID: '1236', itemName: 'my item name 3', itemStatus: 0 },
+      { itemID: '1234', itemName: 'my item name 1', isDone: true },
+      { itemID: '1235', itemName: 'my item name 2', isDone: false },
+      { itemID: '1236', itemName: 'my item name 3', isDone: true },
     ],
   },
 ];
@@ -15,10 +15,20 @@ let listsExample = [
 const model = (function () {
   // let lists = [];
   let lists = listsExample;
-
   let state = {
     view: 'overview',
     listID: null,
+    itemID: null,
+    update(args) {
+      const {
+        view = this.view,
+        listID = this.listID,
+        itemID = this.itemID,
+      } = args;
+      this.view = view;
+      this.listID = listID;
+      this.itemID = itemID;
+    },
   };
 
   /** Creates a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
@@ -40,10 +50,8 @@ const model = (function () {
     });
   };
 
-  const removeList = (id) => {
-    console.log(typeof id);
-    const index = lists.findIndex((list) => list.listID === id);
-    lists.splice(index, 1);
+  const getListIndex = (id) => {
+    return lists.findIndex((list) => list.listID === id);
   };
 
   const getList = (id) => {
@@ -51,11 +59,49 @@ const model = (function () {
     return list;
   };
 
+  const getItemIndex = (args) => {
+    const { listID = state.listID, itemID = state.itemID } = args;
+    const list = getList(listID);
+    console.log(list.listItems);
+
+    return list.listItems.findIndex((item) => item.itemID === itemID);
+  };
+
+  const removeList = (id) => {
+    const index = getListIndex(id);
+    lists.splice(index, 1);
+  };
+
+  const item = {
+    add(args) {
+      const { name } = args;
+      const id = _getId();
+      const listIndex = getListIndex(state.listID);
+      if (!lists[listIndex].listItems) {
+        lists[listIndex].listItems = [];
+      }
+      lists[listIndex].listItems.push({
+        itemName: name,
+        itemID: id,
+        isDone: false,
+      });
+    },
+    statusUpdate(args) {
+      const { isDone } = args;
+      const listIndex = getListIndex(state.listID);
+      const itemIndex = getItemIndex(state.itemID);
+
+      // access the list + change item status
+      lists[listIndex].listItems[itemIndex].isDone = isDone;
+    },
+  };
+
   return {
     lists,
+    item,
     addList,
     removeList,
     getList,
-    null: null,
+    state,
   };
 })();

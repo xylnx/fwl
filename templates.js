@@ -13,6 +13,13 @@ const templates = (function () {
     </svg>
   `;
 
+  const _svgLists = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+      <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+      <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+    </svg>
+  `;
+
   const _svgDelete = `
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
@@ -20,36 +27,76 @@ const templates = (function () {
     </svg>
   `;
 
+  const _svgExclam = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+    </svg>
+  `;
+
+  const _svgCheck = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+      <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+      <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+    </svg>
+  `;
+
   // TEMPLATE PARTS
   const header = `
-  <div class="header__upper">
-    <h1 class="header__heading-main">{%headingMain%}</h1>
-    <div class="controls">
-      <button type="button" class="btn control__menu-toggle">
-        ${_svgMenu}
-      </button>
-      <button type="button" class="btn control__add">
-        ${_svgPlus}
-      </button>
+    <div class="header__upper">
+      <div class="header__brand">🦄 FWL</div>
+      <div class="controls">
+        <button type="button" class="btn control__back-to-overview hidden">
+          ${_svgLists}
+        </button>
+        <button type="button" class="btn control__menu-toggle">
+          ${_svgMenu}
+        </button>
+        <button type="button" class="btn control__add">
+          ${_svgPlus}
+        </button>
+      </div>
     </div>
-  </div>
 
-      <form class="header__lower">
-        <label class="input__label">
-          <span class="hidden">
-            {%labelHeaderInput%}
-          </span>
-          <input type="text"/>
-          <button type="button" class="btn input__submit">{%submitBtn%}</button>
-        </label>
-      </form>
+    <form class="header__lower">
+      <label class="input__label">
+        <span class="vis-hidden">
+          {%labelHeaderInput%}
+        </span>
+        <input type="text" class="input__input"/>
+        <button type="button" class="btn input__submit">Add</button>
+      </label>
+    </form>
+
+    <h1 class="header__heading-main">{%headingMain%}</h1>
   `;
 
   const list = `
     <div class="list" data-id={%listID%}>
-      <div class="list__title">{%listName%}</div>
+      <div class="list__name">{%listName%}</div>
       <div class="list__actions">
         <button type="button" class="btn list__actions__delete">
+          ${_svgDelete}
+        </button>
+    </div>
+  `;
+
+  const listItem = `
+    <div 
+      class="list-item" 
+      data-id={%itemID%} 
+      data-isdone="{%isDone%}"
+      >
+
+      <div class="list-item__name">{%itemName%}</div>
+      <div class="list-item__actions">
+        <button type="button" class="btn list-item__actions__status list-item__actions__status--do">
+          ${_svgExclam}
+        </button>
+        <button type="button" class="btn list-item__actions__status list-item__actions__status--done">
+          ${_svgCheck}
+        </button>
+        <button type="button" class="btn list-item__actions__delete hidden">
           ${_svgDelete}
         </button>
     </div>
@@ -58,5 +105,6 @@ const templates = (function () {
   return {
     header,
     list,
+    listItem,
   };
 })();

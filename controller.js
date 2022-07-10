@@ -19,6 +19,15 @@ const controller = (function () {
     // render lists
     view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
+  const handleItemSubmit = () => {
+    const list = model.getList(model.state.listID);
+    const input = view.getElement(DOMStrings.input);
+    const data = { title: input.value, DOMString: DOMStrings.items };
+    // Update model
+    model.item.add({ name: input.value });
+    // render items
+    view.renderList({ list: list, DOMString: DOMStrings.items });
+  };
 
   const handleListDelete = (target) => {
     const ID = target.parentNode.parentNode.dataset.id;
@@ -26,10 +35,31 @@ const controller = (function () {
     view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
 
-  const openList = (target) => {
+  const showList = (target) => {
     const id = target.dataset.id;
     const list = model.getList(id);
     view.renderList({ list: list, DOMString: DOMStrings.items });
+    model.state.update({ view: 'list', listID: id });
+  };
+
+  const showOverview = () => {
+    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    model.state.update({ view: 'overview', listID: null });
+  };
+
+  const changeItemStatus = (target) => {
+    const itemID = target.parentNode.parentNode.dataset.id;
+    model.state.update({ itemID: itemID });
+    if (target.classList.contains('list-item__actions__status--do')) {
+      model.item.statusUpdate({ itemID: itemID, isDone: true });
+    }
+    if (target.classList.contains('list-item__actions__status--done')) {
+      model.item.statusUpdate({ itemID: itemID, isDone: false });
+    }
+    view.renderList({
+      list: model.getList(model.state.listID),
+      DOMString: DOMStrings.items,
+    });
   };
 
   const dispatchEvents = (e) => {
@@ -38,14 +68,27 @@ const controller = (function () {
         if (e.target.classList.contains('control__add')) {
           handleAddBtn(e);
         }
-        if (e.target.classList.contains('input__submit')) {
-          handleSubmit();
+        if (model.state.view === 'list') {
+          if (e.target.classList.contains('list-item__actions__status')) {
+            changeItemStatus(e.target);
+          }
+          if (e.target.classList.contains('input__submit')) {
+            handleItemSubmit();
+          }
+          if (e.target.classList.contains('control__back-to-overview')) {
+            showOverview();
+          }
         }
-        if (e.target.classList.contains('list__actions__delete')) {
-          handleListDelete(e.target);
-        }
-        if (e.target.classList.contains('list')) {
-          openList(e.target);
+        if (model.state.view === 'overview') {
+          if (e.target.classList.contains('input__submit')) {
+            handleSubmit();
+          }
+          if (e.target.classList.contains('list__actions__delete')) {
+            handleListDelete(e.target);
+          }
+          if (e.target.classList.contains('list')) {
+            showList(e.target);
+          }
         }
       },
     };
@@ -72,7 +115,6 @@ const controller = (function () {
     testData.map((dp) => {
       model.addList(dp);
     });
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
 
   const init = () => {
@@ -84,6 +126,7 @@ const controller = (function () {
     header.insertAdjacentHTML('beforeend', html);
 
     testing();
+    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
 })();
