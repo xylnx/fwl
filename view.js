@@ -7,6 +7,10 @@ const view = (function () {
     getElement(DOMString).innerHTML = '';
   };
 
+  const clearInputField = (DOMString) => {
+    getElement(DOMString).value = '';
+  };
+
   const toggleInput = (DS, btnEl) => {
     const headerLower = view.getElement(DS.headerLower);
     headerLower.classList.toggle('hidden');
@@ -82,5 +86,6 @@ const view = (function () {
     renderLists,
     renderList,
     toggleInput,
+    clearInputField,
   };
 })();

@@ -16,6 +16,7 @@ const controller = (function () {
     const data = { title: input.value, DOMString: DOMStrings.items };
     // Update model
     model.addList({ name: input.value });
+    view.clearInputField(DOMStrings.input);
     // render lists
     view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
@@ -25,6 +26,7 @@ const controller = (function () {
     const data = { title: input.value, DOMString: DOMStrings.items };
     // Update model
     model.item.add({ name: input.value });
+    view.clearInputField(DOMStrings.input);
     // render items
     view.renderList({ list: list, DOMString: DOMStrings.items });
   };
