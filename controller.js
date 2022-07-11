@@ -91,12 +91,26 @@ const controller = (function () {
           }
         }
       },
+      keydown: function () {
+        if (model.state.view === 'list') {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleItemSubmit();
+          }
+        }
+        if (model.state.view === 'overview') {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSubmit();
+          }
+        }
+      },
     };
     return events[e.type]();
   };
 
   const listenToEvents = () => {
-    const eventTypes = ['click'];
+    const eventTypes = ['click', 'keydown'];
     eventTypes.map((eventType) =>
       document.body.addEventListener(eventType, dispatchEvents)
     );
