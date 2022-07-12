@@ -13,6 +13,7 @@ let listsExample = [
 ];
 
 const model = (function () {
+  // DATA
   // let lists = [];
   let lists = listsExample;
   let state = {
@@ -31,11 +32,31 @@ const model = (function () {
     },
   };
 
-  /** Creates a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
+  /** Create a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
   const _getId = () => Math.floor(Math.random() * 1e15).toString();
 
+  /** Persist data to local storage
+   * @param {Object} data - Contains data a key used to identify this data in local storage.
+   */
+  const writeToLocalStorage = (data) => {
+    const { key, value } = data;
+    const json = JSON.stringify(value);
+    window.localStorage.setItem(key, json);
+  };
+
+  /** Get data from local storage and parse it.
+   * @param {string} key - The key assotiated with JSON stored in local storage.
+   */
+  const readFromLocalStorage = (key) => {
+    const data = window.localStorage.getItem(key);
+    if (data) {
+      return JSON.parse(data);
+    }
+    return null;
+  };
+
   /**
-   * Adds a new list to the lists array.
+   * Add a new list to the lists array.
    * @param {Object} data - Necessary data to create a list item, contains e.g. its name.
    */
   const addList = (data) => {
