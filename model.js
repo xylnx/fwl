@@ -15,6 +15,7 @@ let listsExample = [
 const model = (function () {
   // DATA
   // let lists = [];
+  let listsLSKey = 'fwlLists';
   let lists = listsExample;
   let state = {
     view: 'overview',
@@ -36,12 +37,14 @@ const model = (function () {
   const _getId = () => Math.floor(Math.random() * 1e15).toString();
 
   /** Persist data to local storage
-   * @param {Object} data - Contains data a key used to identify this data in local storage.
+   * @param {Object} data - Contains key value pairs. Keys are used to identify assotiated data in LS, e.g {myKey: myData}.
    */
   const writeToLocalStorage = (data) => {
-    const { key, value } = data;
-    const json = JSON.stringify(value);
-    window.localStorage.setItem(key, json);
+    const keys = Object.keys(data);
+    keys.map((key) => {
+      const json = JSON.stringify(data[key]);
+      window.localStorage.setItem(key, json);
+    });
   };
 
   /** Get data from local storage and parse it.
@@ -69,6 +72,8 @@ const model = (function () {
       listName: name,
       listItems: items,
     });
+    console.log(lists);
+    writeToLocalStorage({ [listsLSKey]: lists });
   };
 
   const getListIndex = (id) => {
@@ -91,6 +96,7 @@ const model = (function () {
   const removeList = (id) => {
     const index = getListIndex(id);
     lists.splice(index, 1);
+    writeToLocalStorage({ [listsLSKey]: lists });
   };
 
   const item = {
@@ -106,6 +112,7 @@ const model = (function () {
         itemID: id,
         isDone: false,
       });
+      writeToLocalStorage({ [listsLSKey]: lists });
     },
     statusUpdate(args) {
       const { isDone } = args;
@@ -114,6 +121,7 @@ const model = (function () {
 
       // access the list + change item status
       lists[listIndex].listItems[itemIndex].isDone = isDone;
+      writeToLocalStorage({ [listsLSKey]: lists });
     },
   };
 
