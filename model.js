@@ -14,9 +14,9 @@ let listsExample = [
 
 const model = (function () {
   // DATA
-  // let lists = [];
+  let lists = [];
+  // let lists = listsExample;
   let listsLSKey = 'fwlLists';
-  let lists = listsExample;
   let state = {
     view: 'overview',
     listID: null,
@@ -56,6 +56,13 @@ const model = (function () {
       return JSON.parse(data);
     }
     return null;
+  };
+
+  const getLists = () => {
+    const restoredLists = readFromLocalStorage(listsLSKey);
+    lists = restoredLists;
+    console.log('###', lists);
+    return lists;
   };
 
   /**
@@ -126,11 +133,11 @@ const model = (function () {
   };
 
   return {
-    lists,
     item,
     addList,
     removeList,
     getList,
+    getLists,
     state,
   };
 })();

@@ -13,13 +13,14 @@ const controller = (function () {
 
   const handleSubmit = () => {
     const input = view.getElement(DOMStrings.input);
-    const data = { title: input.value, DOMString: DOMStrings.items };
+
     // Update model
     model.addList({ name: input.value });
     view.clearInputField(DOMStrings.input);
     // render lists
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
   };
+
   const handleItemSubmit = () => {
     const list = model.getList(model.state.listID);
     const input = view.getElement(DOMStrings.input);
@@ -34,7 +35,7 @@ const controller = (function () {
   const handleListDelete = (target) => {
     const ID = target.parentNode.parentNode.dataset.id;
     model.removeList(ID);
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
   };
 
   const showList = (target) => {
@@ -45,7 +46,7 @@ const controller = (function () {
   };
 
   const showOverview = () => {
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
     model.state.update({ view: 'overview', listID: null });
   };
 
@@ -141,8 +142,10 @@ const controller = (function () {
     });
     header.insertAdjacentHTML('beforeend', html);
 
-    testing();
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    const curLists = model.getLists();
+
+    // testing();
+    view.renderLists({ lists: curLists, DOMString: DOMStrings.items });
   };
   init();
 })();
