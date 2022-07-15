@@ -60,8 +60,8 @@ const model = (function () {
 
   const getLists = () => {
     const restoredLists = readFromLocalStorage(listsLSKey);
+    if (!restoredLists) return;
     lists = restoredLists;
-    console.log('###', lists);
     return lists;
   };
 

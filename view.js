@@ -46,6 +46,7 @@ const view = (function () {
     // Hide go back to overview btn
     getElement('.control__back-to-overview').classList.add('hidden');
 
+    if (!lists) return;
     lists.map((list) => {
       console.log(list);
       const html = generateHtml(templates.list, {
