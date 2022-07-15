@@ -118,6 +118,12 @@ svg {
   overflow: hidden;
 }
 
+.header__upper,
+.header__lower {
+  max-width: 640px;
+  margin: auto;
+}
+
 .header__upper {
   display: flex;
   justify-content: space-between;
