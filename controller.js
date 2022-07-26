@@ -13,6 +13,7 @@ const controller = (function () {
 
   const handleSubmit = () => {
     const input = view.getElement(DOMStrings.input);
+    if (!input.value) return;
 
     // Update model
     model.addList({ name: input.value });
@@ -24,7 +25,8 @@ const controller = (function () {
   const handleItemSubmit = () => {
     const list = model.getList(model.state.listID);
     const input = view.getElement(DOMStrings.input);
-    const data = { title: input.value, DOMString: DOMStrings.items };
+    if (!input.value) return;
+
     // Update model
     model.item.add({ name: input.value });
     view.clearInputField(DOMStrings.input);
