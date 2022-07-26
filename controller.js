@@ -95,13 +95,20 @@ const controller = (function () {
         }
       },
       keydown: function () {
-        if (model.state.view === 'list') {
+        const input = view.getElement(DOMStrings.input);
+        if (
+          model.state.view === 'list' && //
+          document.activeElement === input
+        ) {
           if (e.key === 'Enter') {
             e.preventDefault();
             handleItemSubmit();
           }
         }
-        if (model.state.view === 'overview') {
+        if (
+          model.state.view === 'overview' &&
+          document.activeElement === input
+        ) {
           if (e.key === 'Enter') {
             e.preventDefault();
             handleSubmit();
