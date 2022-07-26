@@ -7,6 +7,10 @@ const controller = (function () {
     items: '.items',
   };
 
+  const confirmDelete = (item) => {
+    return window.confirm(`Delete ${item}?`);
+  };
+
   const handleAddBtn = (e) => {
     view.toggleInput(DOMStrings, e.target);
   };
@@ -35,7 +39,12 @@ const controller = (function () {
   };
 
   const handleListDelete = (target) => {
-    const ID = target.parentNode.parentNode.dataset.id;
+    const dataSet = target.parentNode.parentNode.dataset;
+    const ID = dataSet.id;
+    const name = dataSet.name;
+
+    if (!confirmDelete(name)) return;
+
     model.removeList(ID);
     view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
   };

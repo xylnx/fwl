@@ -72,7 +72,11 @@ const templates = (function () {
   `;
 
   const list = `
-    <div class="list" data-id={%listID%}>
+    <div 
+      class="list" 
+      data-id={%listID%}
+      data-name={%listName%}
+      >
       <div class="list__name">{%listName%}</div>
       <div class="list__actions">
         <button type="button" class="btn list__actions__delete">
