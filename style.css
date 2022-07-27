@@ -15,7 +15,8 @@ html {
 /* GENERAL STYLING */
 :root {
   --clr-primary-400: #333;
-  --clr-accent: #f2f3f4;
+  --clr-secondary-400: #f2f3f4;
+  --clr-accent: #f20056;
   --clr-bg: #555;
   --clr-text-400: #f2f3f4;
 
@@ -130,17 +131,18 @@ svg {
   align-items: center;
   flex-wrap: wrap;
   padding: 1.6rem 0.8rem;
-  border-bottom: 1px solid var(--clr-accent);
+  border-bottom: 1px solid var(--clr-secondary-400);
 }
+
 .header__brand {
-  color: var(--clr-accent);
+  color: var(--clr-text-400);
   font-size: var(--fs-800);
   font-weight: 200;
   letter-spacing: 4px;
 }
 
 .header__lower {
-  background-color: var(--clr-accent);
+  background-color: var(--clr-secondary-400);
   width: 100%;
   padding: 1.6rem 0.8rem;
   transition: all 0.5s;
