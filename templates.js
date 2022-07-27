@@ -106,9 +106,26 @@ const templates = (function () {
     </div>
   `;
 
+  const login = `
+    <form class="login">
+      <p class="login__msg">Please login!</p>
+      <label class="login__label">
+        <span>User name</span>
+        <input type="text" class="login__input login__input--user">
+      </label>
+      <label class="login__label">
+        <span>Password</span>
+        <input type="password" class="login__input login__input--pw">
+      </label>
+      <button type="button" class="btn login__submit">Log me in!</button>
+      <button type="button" class="btn login__try-me"><span>Try</span> without logging in</button>
+    </form>
+  `;
+
   return {
     header,
     list,
     listItem,
+    login,
   };
 })();
