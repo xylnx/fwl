@@ -58,7 +58,7 @@ const templates = (function () {
       </div>
     </div>
 
-    <form class="header__lower">
+    <form class="header__lower hidden">
       <label class="input__label">
         <span class="vis-hidden">
           {%labelHeaderInput%}
