@@ -1,10 +1,15 @@
 const controller = (function () {
+  const CONFIG = {
+    authUrl: 'http://localhost:3001/api/v1/auth',
+  };
   const DOMStrings = {
     header: 'header',
     headerLower: '.header__lower',
     main: 'main',
     input: '.header__lower input',
-    items: '.items',
+    items: 'main',
+    loginUser: '.login__input--user',
+    loginPw: '.login__input--pw',
   };
 
   const confirmDelete = (item) => {
@@ -36,6 +41,53 @@ const controller = (function () {
     view.clearInputField(DOMStrings.input);
     // render items
     view.renderList({ list: list, DOMString: DOMStrings.items });
+  };
+
+  const login = async () => {
+    console.log('Hello from login');
+    const user = model.state.user;
+    const pwd = model.state.password;
+
+    try {
+      const response = await fetch(CONFIG.authUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ user, pwd }),
+      });
+      if (!response.ok) {
+        if (response.status === 401) {
+          return await sendRefreshToken();
+        }
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.log(error.stack);
+      // displayError();
+    }
+  };
+
+  const handleLoginSubmit = async () => {
+    const user = view.getElement(DOMStrings.loginUser).value;
+    const pw = view.getElement(DOMStrings.loginPw).value;
+    console.log(user, pw);
+    if (!user || !pw) return;
+
+    model.state.update({ view: 'overview', user: user, password: pw });
+
+    const loginResponse = await login();
+    console.log(loginResponse);
+  };
+
+  const handleTryOut = () => {
+    const curLists = model.getLists();
+    model.state.update({ view: 'overview' });
+    view.renderLists({
+      lists: curLists,
+      DOMString: DOMStrings.main,
+    });
+    view.toggleInput(DOMStrings, document.querySelector('.controls__add'));
   };
 
   const handleListDelete = (target) => {
@@ -82,6 +134,16 @@ const controller = (function () {
         if (e.target.classList.contains('control__add')) {
           handleAddBtn(e);
         }
+        // LOGIN VIEW
+        if (model.state.view === 'login') {
+          if (e.target.classList.contains('login__submit')) {
+            handleLoginSubmit();
+          }
+          if (e.target.classList.contains('login__try-me')) {
+            handleTryOut();
+          }
+        }
+        // LIST VIEW
         if (model.state.view === 'list') {
           if (e.target.classList.contains('list-item__actions__status')) {
             changeItemStatus(e.target);
@@ -93,6 +155,7 @@ const controller = (function () {
             showOverview();
           }
         }
+        // LIST OVERVIEW
         if (model.state.view === 'overview') {
           if (e.target.classList.contains('input__submit')) {
             handleSubmit();
@@ -107,6 +170,9 @@ const controller = (function () {
       },
       keydown: function () {
         const input = view.getElement(DOMStrings.input);
+        if (model.state.view === 'login' && e.key === 'Enter') {
+          handleLoginSubmit();
+        }
         if (
           model.state.view === 'list' && //
           document.activeElement === input
@@ -162,8 +228,12 @@ const controller = (function () {
 
     const curLists = model.getLists();
 
+    // Show login view
+    model.state.update({ view: 'login' });
+    view.renderLogin({ DOMString: DOMStrings.main });
+
     // testing();
-    view.renderLists({ lists: curLists, DOMString: DOMStrings.items });
+    // view.renderLists({ lists: curLists, DOMString: DOMStrings.items });
   };
   init();
 })();
