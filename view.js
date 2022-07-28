@@ -29,6 +29,7 @@ const view = (function () {
   const generateHtml = (template, data) => {
     // Put data into the markup
     let html = template;
+    if (!data) return html;
     for (const [key, value] of Object.entries(data)) {
       html = html.replaceAll(`{%${key}%}`, `${value}`);
     }
@@ -40,7 +41,7 @@ const view = (function () {
    * @param {Array} data -
    */
   const renderLists = (data) => {
-    const { lists, DOMString } = data;
+    const { lists, clearHtml, DOMString } = data;
     clearView(DOMString);
 
     // Hide go back to overview btn
@@ -81,11 +82,17 @@ const view = (function () {
     });
   };
 
+  const renderLogin = ({ DOMString }) => {
+    const html = generateHtml(templates.login);
+    getElement(DOMString).insertAdjacentHTML('beforeend', html);
+  };
+
   return {
     getElement,
     generateHtml,
     renderLists,
     renderList,
+    renderLogin,
     toggleInput,
     clearInputField,
   };
