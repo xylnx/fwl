@@ -226,7 +226,7 @@ const controller = (function () {
     });
     header.insertAdjacentHTML('beforeend', html);
 
-    const curLists = model.getLists();
+    const curLists = model.getLists(true);
 
     // Show login view
     // model.state.update({ view: 'login' });

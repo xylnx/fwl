@@ -34,12 +34,18 @@ const model = (function () {
   };
 
   const getLists = (LS) => {
+    // Return lists stored in memory
     if (!LS) return lists;
 
+    // Return lists stored in local storage
     const restoredLists = readFromLocalStorage(listsLSKey);
     if (!restoredLists) return;
     lists = restoredLists;
     return lists;
+  };
+
+  const saveListsToLS = () => {
+    writeToLocalStorage({ [listsLSKey]: lists });
   };
 
   /** Create a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
@@ -82,7 +88,7 @@ const model = (function () {
       listItems: items,
     });
     console.log(lists);
-    writeToLocalStorage({ [listsLSKey]: lists });
+    // writeToLocalStorage({ [listsLSKey]: lists });
   };
 
   const getListIndex = (id) => {
@@ -105,7 +111,7 @@ const model = (function () {
   const removeList = (id) => {
     const index = getListIndex(id);
     lists.splice(index, 1);
-    writeToLocalStorage({ [listsLSKey]: lists });
+    // writeToLocalStorage({ [listsLSKey]: lists });
   };
 
   const item = {
@@ -121,7 +127,7 @@ const model = (function () {
         itemID: id,
         isDone: false,
       });
-      writeToLocalStorage({ [listsLSKey]: lists });
+      // writeToLocalStorage({ [listsLSKey]: lists });
     },
     statusUpdate(args) {
       const { isDone } = args;
@@ -130,7 +136,7 @@ const model = (function () {
 
       // access the list + change item status
       lists[listIndex].listItems[itemIndex].isDone = isDone;
-      writeToLocalStorage({ [listsLSKey]: lists });
+      // writeToLocalStorage({ [listsLSKey]: lists });
     },
   };
 
