@@ -33,6 +33,15 @@ const model = (function () {
     },
   };
 
+  const getLists = (LS) => {
+    if (!LS) return lists;
+
+    const restoredLists = readFromLocalStorage(listsLSKey);
+    if (!restoredLists) return;
+    lists = restoredLists;
+    return lists;
+  };
+
   /** Create a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
   const _getId = () => Math.floor(Math.random() * 1e15).toString();
 
@@ -56,13 +65,6 @@ const model = (function () {
       return JSON.parse(data);
     }
     return null;
-  };
-
-  const getLists = () => {
-    const restoredLists = readFromLocalStorage(listsLSKey);
-    if (!restoredLists) return;
-    lists = restoredLists;
-    return lists;
   };
 
   /**

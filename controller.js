@@ -229,11 +229,11 @@ const controller = (function () {
     const curLists = model.getLists();
 
     // Show login view
-    model.state.update({ view: 'login' });
-    view.renderLogin({ DOMString: DOMStrings.main });
+    // model.state.update({ view: 'login' });
+    // view.renderLogin({ DOMString: DOMStrings.main });
 
     // testing();
-    // view.renderLists({ lists: curLists, DOMString: DOMStrings.items });
+    view.renderLists({ lists: curLists, DOMString: DOMStrings.items });
   };
   init();
 })();
