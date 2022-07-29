@@ -44,9 +44,9 @@ const controller = (function () {
   };
 
   const login = async () => {
-    console.log('Hello from login');
     const user = model.state.user;
     const pwd = model.state.password;
+    // console.log({ user }, { pwd });
 
     try {
       const response = await fetch(CONFIG.authUrl, {
@@ -61,6 +61,7 @@ const controller = (function () {
         }
         throw new Error(`${response.status} ${response.statusText}`);
       }
+      // Response contains the token
       return await response.json();
     } catch (error) {
       console.log(error.stack);
@@ -71,13 +72,13 @@ const controller = (function () {
   const handleLoginSubmit = async () => {
     const user = view.getElement(DOMStrings.loginUser).value;
     const pw = view.getElement(DOMStrings.loginPw).value;
-    console.log(user, pw);
     if (!user || !pw) return;
 
     model.state.update({ view: 'overview', user: user, password: pw });
 
     const loginResponse = await login();
     console.log(loginResponse);
+    model.state.update({ authToken: loginResponse.accessToken });
   };
 
   const handleTryOut = () => {
@@ -218,7 +219,7 @@ const controller = (function () {
     });
   };
 
-  const init = () => {
+  const init = async () => {
     listenToEvents();
     const header = view.getElement(DOMStrings.header);
     const html = view.generateHtml(templates.header, {
@@ -226,14 +227,13 @@ const controller = (function () {
     });
     header.insertAdjacentHTML('beforeend', html);
 
-    const curLists = model.getLists(true);
-
     // Show login view
     // model.state.update({ view: 'login' });
     // view.renderLogin({ DOMString: DOMStrings.main });
 
     // testing();
-    view.renderLists({ lists: curLists, DOMString: DOMStrings.items });
+    await model.getLists({ API: true });
+    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
 })();

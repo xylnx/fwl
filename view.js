@@ -38,7 +38,7 @@ const view = (function () {
 
   /**
    * Adds the lists to the list view.
-   * @param {Array} data -
+   * @param {Object} data -
    */
   const renderLists = (data) => {
     const { lists, clearHtml, DOMString } = data;
@@ -49,7 +49,6 @@ const view = (function () {
 
     if (!lists) return;
     lists.map((list) => {
-      console.log(list);
       const html = generateHtml(templates.list, {
         listName: list.listName,
         listID: list.listID,

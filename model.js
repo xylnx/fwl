@@ -1,4 +1,4 @@
-// Data structureli:
+// Data structureli:k
 
 let listsExample = [
   {
@@ -21,29 +21,82 @@ const model = (function () {
     view: 'overview',
     listID: null,
     itemID: null,
+    user: null,
+    password: null,
+    authToken:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5Eb2UiLCJpYXQiOjE2NTkwODIxNjMsImV4cCI6MTY1OTE2ODU2M30.AA-KGs_DdC-m_DsI--MsV1V_jHCVcL56pGIRCiEkqII',
     update(args) {
       const {
         view = this.view,
         listID = this.listID,
         itemID = this.itemID,
+        user = this.user,
+        password = this.password,
+        authToken = this.authToken,
       } = args;
       this.view = view;
       this.listID = listID;
       this.itemID = itemID;
+      this.user = user;
+      this.password = password;
+      this.authToken = authToken;
+      console.log('STATE:', this);
     },
   };
 
-  const getLists = (LS) => {
-    // Return lists stored in memory
-    if (!LS) return lists;
+  const getLists = (opts = {}) => {
+    const { LS, API } = opts;
+    if (!LS && !API) return model.lists;
+    if (LS) return getListsFromLS();
+    if (API) return getListsFromAPI();
+  };
 
+  const getListsFromAPI = async () => {
+    const fetchOpts = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${state.authToken}`,
+      },
+    };
+
+    try {
+      const response = await fetch(
+        'http://localhost:3001/api/v1/json/lists',
+        fetchOpts
+      );
+      if (!response.ok) return new Error('sth went wrong');
+      const data = await response.json();
+      console.log('api response: ', response);
+      model.lists = data.data.lists;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const sendListsToAPI = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/json/lists', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${state.authToken}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({ lists: model.lists }),
+      });
+      console.log(response);
+    } catch (error) {
+      console.log('from model.sendListsToAPI: ', error);
+    }
+  };
+
+  const getListsFromLS = () => {
     // Return lists stored in local storage
     const restoredLists = readFromLocalStorage(listsLSKey);
     if (!restoredLists) return;
     lists = restoredLists;
     return lists;
   };
-
   const saveListsToLS = () => {
     writeToLocalStorage({ [listsLSKey]: lists });
   };
@@ -61,7 +114,6 @@ const model = (function () {
       window.localStorage.setItem(key, json);
     });
   };
-
   /** Get data from local storage and parse it.
    * @param {string} key - The key assotiated with JSON stored in local storage.
    */
@@ -82,36 +134,36 @@ const model = (function () {
     const id = _getId();
     const items = null;
 
-    lists.push({
+    model.lists.push({
       listID: id,
       listName: name,
       listItems: items,
     });
-    console.log(lists);
     // writeToLocalStorage({ [listsLSKey]: lists });
+    sendListsToAPI();
   };
 
   const getListIndex = (id) => {
-    return lists.findIndex((list) => list.listID === id);
+    return model.lists.findIndex((list) => list.listID === id);
   };
 
   const getList = (id) => {
-    const list = lists.find((list) => list.listID === id);
+    const list = model.lists.find((list) => list.listID === id);
     return list;
   };
 
   const getItemIndex = (args) => {
     const { listID = state.listID, itemID = state.itemID } = args;
     const list = getList(listID);
-    console.log(list.listItems);
 
     return list.listItems.findIndex((item) => item.itemID === itemID);
   };
 
   const removeList = (id) => {
     const index = getListIndex(id);
-    lists.splice(index, 1);
+    model.lists.splice(index, 1);
     // writeToLocalStorage({ [listsLSKey]: lists });
+    sendListsToAPI();
   };
 
   const item = {
@@ -119,24 +171,26 @@ const model = (function () {
       const { name } = args;
       const id = _getId();
       const listIndex = getListIndex(state.listID);
-      if (!lists[listIndex].listItems) {
-        lists[listIndex].listItems = [];
+      if (!model.lists[listIndex].listItems) {
+        model.lists[listIndex].listItems = [];
       }
-      lists[listIndex].listItems.push({
+      model.lists[listIndex].listItems.push({
         itemName: name,
         itemID: id,
         isDone: false,
       });
       // writeToLocalStorage({ [listsLSKey]: lists });
+      sendListsToAPI();
     },
     statusUpdate(args) {
       const { isDone } = args;
       const listIndex = getListIndex(state.listID);
-      const itemIndex = getItemIndex(state.itemID);
+      const itemIndex = getItemIndex(model.state.itemID);
 
       // access the list + change item status
-      lists[listIndex].listItems[itemIndex].isDone = isDone;
+      model.lists[listIndex].listItems[itemIndex].isDone = isDone;
       // writeToLocalStorage({ [listsLSKey]: lists });
+      sendListsToAPI();
     },
   };
 
@@ -147,5 +201,7 @@ const model = (function () {
     getList,
     getLists,
     state,
+    getListsFromAPI,
+    sendListsToAPI,
   };
 })();
