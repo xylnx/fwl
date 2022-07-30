@@ -46,6 +46,7 @@ const model = (function () {
   };
 
   const getLists = (opts = {}) => {
+    console.log(3);
     const { LS, API } = opts;
     if (!LS && !API) return model.lists;
     if (LS) return getListsFromLS();
@@ -61,24 +62,31 @@ const model = (function () {
       },
     };
 
-    try {
-      const response = await fetch(
-        'http://localhost:3001/api/v1/json/lists',
-        fetchOpts
-      );
-      if (!response.ok) {
-        if (response.status === 401) {
-          return await sendRefreshToken();
-        }
-        throw new Error(`${response.status} ${response.statusText}`);
+    const response = await fetch(
+      'http://localhost:3001/api/v1/json/lists',
+      fetchOpts
+    );
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('unauthorized');
       }
-
-      const data = await response.json();
-      console.log('api response: ', response);
-      model.lists = data.data.lists;
-    } catch (error) {
-      console.log(error);
+      if (response.status === 403) {
+        throw new Error('forbidden');
+      }
+      throw new Error(`${response.status} ${response.statusText}`);
     }
+    // authorized but no content here
+    if (response.status === 204) {
+      console.log('no content here, create your first list');
+      model.lists = [];
+      throw new Error('no content');
+    }
+
+    console.log(response);
+    const data = await response.json();
+    console.log('api response: ', response);
+    model.lists = data.data.lists;
+    console.log(model.lists);
   };
   const sendListsToAPI = async () => {
     try {
