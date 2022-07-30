@@ -15,7 +15,8 @@ html {
 /* GENERAL STYLING */
 :root {
   --clr-primary-400: #333;
-  --clr-accent: #f2f3f4;
+  --clr-secondary-400: #f2f3f4;
+  --clr-accent: #f20056;
   --clr-bg: #555;
   --clr-text-400: #f2f3f4;
 
@@ -51,10 +52,11 @@ input {
 
 .btn {
   background: transparent;
-  border: 0;
-  box-shadow: 0;
+  border: 1px solid currentColor;
+  box-shadow: none;
   color: currentColor;
   padding: 0.5em;
+  border-radius: var(--border-radius);
   cursor: pointer;
 }
 
@@ -67,13 +69,14 @@ svg {
   height: 3.2rem;
 }
 
-.input__input {
+.input__input,
+.login__input {
   flex: 1 1;
   padding: 0.5em;
   border: 0;
   border: 1px solid var(--clr-primary-400);
   border-radius: var(--border-radius);
-  background: #000;
+  background-color: #000;
   color: var(--clr-text-400);
 }
 
@@ -86,8 +89,14 @@ svg {
 
 .input__submit {
   color: var(--clr-primary-400);
-  border: 1px solid var(--clr-primary-400);
-  border-radius: var(--border-radius);
+  transition: 0.2s all ease-in;
+}
+
+.input__submit:hover {
+  background-color: #000;
+  color: var(--clr-secondary-400);
+  border-color: #000;
+  transition: 0.2s all ease-in;
 }
 
 /* COMPONENTS */
@@ -130,17 +139,18 @@ svg {
   align-items: center;
   flex-wrap: wrap;
   padding: 1.6rem 0.8rem;
-  border-bottom: 1px solid var(--clr-accent);
+  border-bottom: 1px solid var(--clr-secondary-400);
 }
+
 .header__brand {
-  color: var(--clr-accent);
+  color: var(--clr-text-400);
   font-size: var(--fs-800);
   font-weight: 200;
   letter-spacing: 4px;
 }
 
 .header__lower {
-  background-color: var(--clr-accent);
+  background-color: var(--clr-secondary-400);
   width: 100%;
   padding: 1.6rem 0.8rem;
   transition: all 0.5s;
@@ -153,6 +163,11 @@ svg {
   font-weight: 400;
 }
 
+.control__back-to-overview,
+.control__add,
+.control__menu-toggle {
+  border: 0;
+}
 .control__back-to-overview {
   color: var(--clr-accent);
 }
@@ -179,16 +194,55 @@ svg {
   text-decoration: line-through;
 }
 
-.items {
+.main {
   margin-top: 1.6rem;
   display: grid;
   gap: var(--gap);
 }
 
-.items .btn {
+.main .btn {
   display: flex;
-  border: 1px solid currentColor;
-  border-radius: var(--border-radius);
+}
+
+/* LOGIN */
+.login__msg {
+  margin: 1.6rem 0 4.4rem 0;
+  text-align: center;
+  font-size: var(--fs-800);
+  font-weight: 600;
+  color: var(--clr-accent);
+}
+
+.login__input {
+  background-color: var(--clr-secondary-400);
+  color: var(--clr-primary-400);
+}
+
+.login__label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.6rem;
+}
+.login__label span {
+  margin-bottom: 0.8rem;
+}
+
+.login .btn {
+  display: inline;
+}
+
+.login .btn:hover {
+  background-color: var(--clr-accent);
+  transition: 0.2s all ease-in;
+}
+
+.login .btn span {
+  color: var(--clr-accent);
+}
+
+.login .btn:hover span {
+  color: var(--clr-primary-400);
+  transition: 0.2s all ease-in;
 }
 
 /* UTILITIES */

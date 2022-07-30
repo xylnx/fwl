@@ -1,10 +1,17 @@
 const controller = (function () {
+  const CONFIG = {
+    authUrl: 'http://localhost:3001/api/v1/auth',
+    refreshUrl: 'http://localhost:3001/api/v1/refresh',
+    logoutUrl: 'http://localhost:3001/api/v1/logout',
+  };
   const DOMStrings = {
     header: 'header',
     headerLower: '.header__lower',
     main: 'main',
     input: '.header__lower input',
-    items: '.items',
+    items: 'main',
+    loginUser: '.login__input--user',
+    loginPw: '.login__input--pw',
   };
 
   const confirmDelete = (item) => {
@@ -36,6 +43,54 @@ const controller = (function () {
     view.clearInputField(DOMStrings.input);
     // render items
     view.renderList({ list: list, DOMString: DOMStrings.items });
+  };
+
+  const login = async () => {
+    const user = model.state.user;
+    const pwd = model.state.password;
+    // console.log({ user }, { pwd });
+
+    try {
+      const response = await fetch(CONFIG.authUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ user, pwd }),
+      });
+      if (!response.ok) {
+        if (response.status === 401) {
+          return await refreshAuth();
+        }
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      // Response contains the token
+      return await response.json();
+    } catch (error) {
+      console.log(error.stack);
+      // displayError();
+    }
+  };
+
+  const handleLoginSubmit = async () => {
+    const user = view.getElement(DOMStrings.loginUser).value;
+    const pw = view.getElement(DOMStrings.loginPw).value;
+    if (!user || !pw) return;
+
+    model.state.update({ view: 'overview', user: user, password: pw });
+
+    const loginResponse = await login();
+    console.log(loginResponse);
+    model.state.update({ authToken: loginResponse.accessToken });
+  };
+
+  const handleTryOut = () => {
+    const curLists = model.getLists();
+    model.state.update({ view: 'overview' });
+    view.renderLists({
+      lists: curLists,
+      DOMString: DOMStrings.main,
+    });
+    view.toggleInput(DOMStrings, document.querySelector('.controls__add'));
   };
 
   const handleListDelete = (target) => {
@@ -82,6 +137,16 @@ const controller = (function () {
         if (e.target.classList.contains('control__add')) {
           handleAddBtn(e);
         }
+        // LOGIN VIEW
+        if (model.state.view === 'login') {
+          if (e.target.classList.contains('login__submit')) {
+            handleLoginSubmit();
+          }
+          if (e.target.classList.contains('login__try-me')) {
+            handleTryOut();
+          }
+        }
+        // LIST VIEW
         if (model.state.view === 'list') {
           if (e.target.classList.contains('list-item__actions__status')) {
             changeItemStatus(e.target);
@@ -93,6 +158,7 @@ const controller = (function () {
             showOverview();
           }
         }
+        // LIST OVERVIEW
         if (model.state.view === 'overview') {
           if (e.target.classList.contains('input__submit')) {
             handleSubmit();
@@ -107,6 +173,9 @@ const controller = (function () {
       },
       keydown: function () {
         const input = view.getElement(DOMStrings.input);
+        if (model.state.view === 'login' && e.key === 'Enter') {
+          handleLoginSubmit();
+        }
         if (
           model.state.view === 'list' && //
           document.activeElement === input
@@ -152,7 +221,43 @@ const controller = (function () {
     });
   };
 
-  const init = () => {
+  const refreshAuth = async () => {
+    console.log(2);
+    try {
+      const response = await fetch(CONFIG.refreshUrl, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+      console.log(response);
+      if (!response.ok) {
+        if (response.status === 401 || response.status == 403) {
+          // Show login view
+          model.state.update({ view: 'login' });
+          view.renderLogin({ DOMString: DOMStrings.main });
+        }
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      // Response contains the token
+
+      const responseJson = await response.json();
+      const token = responseJson.accessToken;
+      model.state.update({ authToken: token });
+    } catch (error) {
+      console.log(error.stack);
+      // displayError();
+    }
+  };
+
+  const logout = async () => {
+    const response = await fetch(CONFIG.logoutUrl, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+  };
+
+  const init = async () => {
     listenToEvents();
     const header = view.getElement(DOMStrings.header);
     const html = view.generateHtml(templates.header, {
@@ -160,10 +265,36 @@ const controller = (function () {
     });
     header.insertAdjacentHTML('beforeend', html);
 
-    const curLists = model.getLists();
+    // Show login view
+    // model.state.update({ view: 'login' });
+    // view.renderLogin({ DOMString: DOMStrings.main });
 
     // testing();
-    view.renderLists({ lists: curLists, DOMString: DOMStrings.items });
+    try {
+      await model.getLists({ API: true });
+    } catch (error) {
+      console.log('###', error.message);
+      if (error.message === 'forbidden' || error.message === 'unauthorized') {
+        console.log(1);
+        await refreshAuth();
+        await model.getLists({ API: true });
+        view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+        return;
+      }
+      if (error.message === 'no content') {
+        console.log(555);
+      } else {
+        console.log(error.message);
+        return;
+      }
+    }
+
+    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
+
+  // For testing
+  return {
+    logout,
+  };
 })();

@@ -29,6 +29,7 @@ const view = (function () {
   const generateHtml = (template, data) => {
     // Put data into the markup
     let html = template;
+    if (!data) return html;
     for (const [key, value] of Object.entries(data)) {
       html = html.replaceAll(`{%${key}%}`, `${value}`);
     }
@@ -37,10 +38,10 @@ const view = (function () {
 
   /**
    * Adds the lists to the list view.
-   * @param {Array} data -
+   * @param {Object} data -
    */
   const renderLists = (data) => {
-    const { lists, DOMString } = data;
+    const { lists, clearHtml, DOMString } = data;
     clearView(DOMString);
 
     // Hide go back to overview btn
@@ -48,7 +49,6 @@ const view = (function () {
 
     if (!lists) return;
     lists.map((list) => {
-      console.log(list);
       const html = generateHtml(templates.list, {
         listName: list.listName,
         listID: list.listID,
@@ -81,11 +81,17 @@ const view = (function () {
     });
   };
 
+  const renderLogin = ({ DOMString }) => {
+    const html = generateHtml(templates.login);
+    getElement(DOMString).insertAdjacentHTML('beforeend', html);
+  };
+
   return {
     getElement,
     generateHtml,
     renderLists,
     renderList,
+    renderLogin,
     toggleInput,
     clearInputField,
   };
