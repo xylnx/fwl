@@ -2,6 +2,7 @@
 node_modules
 TD.md
 td.md
+dump.rdb
 
 # Ignore vim swap files
 [._]*.s[a-v][a-z]
