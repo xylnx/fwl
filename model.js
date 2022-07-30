@@ -25,6 +25,7 @@ const model = (function () {
     password: null,
     authToken:
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5Eb2UiLCJpYXQiOjE2NTkwODIxNjMsImV4cCI6MTY1OTE2ODU2M30.AA-KGs_DdC-m_DsI--MsV1V_jHCVcL56pGIRCiEkqII',
+    // authToken: null,
     update(args) {
       const {
         view = this.view,
@@ -65,7 +66,13 @@ const model = (function () {
         'http://localhost:3001/api/v1/json/lists',
         fetchOpts
       );
-      if (!response.ok) return new Error('sth went wrong');
+      if (!response.ok) {
+        if (response.status === 401) {
+          return await sendRefreshToken();
+        }
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+
       const data = await response.json();
       console.log('api response: ', response);
       model.lists = data.data.lists;

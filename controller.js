@@ -232,7 +232,12 @@ const controller = (function () {
     // view.renderLogin({ DOMString: DOMStrings.main });
 
     // testing();
-    await model.getLists({ API: true });
+    try {
+      await model.getLists({ API: true });
+    } catch (error) {
+      console.log(error);
+    }
+
     view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
