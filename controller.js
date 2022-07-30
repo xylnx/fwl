@@ -1,6 +1,8 @@
 const controller = (function () {
   const CONFIG = {
     authUrl: 'http://localhost:3001/api/v1/auth',
+    refreshUrl: 'http://localhost:3001/api/v1/refresh',
+    logoutUrl: 'http://localhost:3001/api/v1/logout',
   };
   const DOMStrings = {
     header: 'header',
@@ -57,7 +59,7 @@ const controller = (function () {
       });
       if (!response.ok) {
         if (response.status === 401) {
-          return await sendRefreshToken();
+          return await refreshAuth();
         }
         throw new Error(`${response.status} ${response.statusText}`);
       }
@@ -219,6 +221,42 @@ const controller = (function () {
     });
   };
 
+  const refreshAuth = async () => {
+    console.log(2);
+    try {
+      const response = await fetch(CONFIG.refreshUrl, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+      console.log(response);
+      if (!response.ok) {
+        if (response.status === 401 || response.status == 403) {
+          // Show login view
+          model.state.update({ view: 'login' });
+          view.renderLogin({ DOMString: DOMStrings.main });
+        }
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      // Response contains the token
+
+      const responseJson = await response.json();
+      const token = responseJson.accessToken;
+      model.state.update({ authToken: token });
+    } catch (error) {
+      console.log(error.stack);
+      // displayError();
+    }
+  };
+
+  const logout = async () => {
+    const response = await fetch(CONFIG.logoutUrl, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+  };
+
   const init = async () => {
     listenToEvents();
     const header = view.getElement(DOMStrings.header);
@@ -235,10 +273,28 @@ const controller = (function () {
     try {
       await model.getLists({ API: true });
     } catch (error) {
-      console.log(error);
+      console.log('###', error.message);
+      if (error.message === 'forbidden' || error.message === 'unauthorized') {
+        console.log(1);
+        await refreshAuth();
+        await model.getLists({ API: true });
+        view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+        return;
+      }
+      if (error.message === 'no content') {
+        console.log(555);
+      } else {
+        console.log(error.message);
+        return;
+      }
     }
 
     view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
+
+  // For testing
+  return {
+    logout,
+  };
 })();
