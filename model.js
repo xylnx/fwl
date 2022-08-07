@@ -23,9 +23,8 @@ const model = (function () {
     itemID: null,
     user: null,
     password: null,
-    authToken:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5Eb2UiLCJpYXQiOjE2NTkwODIxNjMsImV4cCI6MTY1OTE2ODU2M30.AA-KGs_DdC-m_DsI--MsV1V_jHCVcL56pGIRCiEkqII',
-    // authToken: null,
+    // authToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5Eb2UiLCJpYXQiOjE2NTkwODIxNjMsImV4cCI6MTY1OTE2ODU2M30.AA-KGs_DdC-m_DsI--MsV1V_jHCVcL56pGIRCiEkqII',
+    authToken: null,
     update(args) {
       const {
         view = this.view,
@@ -88,6 +87,7 @@ const model = (function () {
     model.lists = data.data.lists;
     console.log(model.lists);
   };
+
   const sendListsToAPI = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/v1/json/lists', {
@@ -148,6 +148,8 @@ const model = (function () {
     const { name } = data;
     const id = _getId();
     const items = null;
+
+    if (!model.lists) model.lists = [];
 
     model.lists.push({
       listID: id,
