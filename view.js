@@ -82,6 +82,7 @@ const view = (function () {
   };
 
   const renderLogin = ({ DOMString }) => {
+    clearView(DOMString);
     const html = generateHtml(templates.login);
     getElement(DOMString).insertAdjacentHTML('beforeend', html);
   };
