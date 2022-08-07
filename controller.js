@@ -1,9 +1,4 @@
 const controller = (function () {
-  const CONFIG = {
-    authUrl: 'http://localhost:3001/api/v1/auth',
-    refreshUrl: 'http://localhost:3001/api/v1/refresh',
-    logoutUrl: 'http://localhost:3001/api/v1/logout',
-  };
   const DOMStrings = {
     header: 'header',
     headerLower: '.header__lower',
@@ -45,32 +40,6 @@ const controller = (function () {
     view.renderList({ list: list, DOMString: DOMStrings.items });
   };
 
-  const login = async () => {
-    const user = model.state.user;
-    const pwd = model.state.password;
-    // console.log({ user }, { pwd });
-
-    try {
-      const response = await fetch(CONFIG.authUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ user, pwd }),
-      });
-      if (!response.ok) {
-        if (response.status === 401) {
-          return await refreshAuth();
-        }
-        throw new Error(`${response.status} ${response.statusText}`);
-      }
-      // Response contains the token
-      return await response.json();
-    } catch (error) {
-      console.log(error.stack);
-      // displayError();
-    }
-  };
-
   const handleLoginSubmit = async () => {
     const user = view.getElement(DOMStrings.loginUser).value;
     const pw = view.getElement(DOMStrings.loginPw).value;
@@ -78,9 +47,14 @@ const controller = (function () {
 
     model.state.update({ view: 'overview', user: user, password: pw });
 
-    const loginResponse = await login();
-    console.log(loginResponse);
+    const loginResponse = await auth.login();
+    if (!loginResponse) {
+      model.state.update({ authToken: null, view: 'login' });
+      loadLists();
+    }
     model.state.update({ authToken: loginResponse.accessToken });
+    await loadLists();
+    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
 
   const handleTryOut = () => {
@@ -221,40 +195,36 @@ const controller = (function () {
     });
   };
 
-  const refreshAuth = async () => {
-    console.log(2);
+  const loadLists = async () => {
     try {
-      const response = await fetch(CONFIG.refreshUrl, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      });
-      console.log(response);
-      if (!response.ok) {
-        if (response.status === 401 || response.status == 403) {
-          // Show login view
-          model.state.update({ view: 'login' });
-          view.renderLogin({ DOMString: DOMStrings.main });
-        }
-        throw new Error(`${response.status} ${response.statusText}`);
-      }
-      // Response contains the token
-
-      const responseJson = await response.json();
-      const token = responseJson.accessToken;
-      model.state.update({ authToken: token });
+      await model.getLists({ API: true });
     } catch (error) {
-      console.log(error.stack);
-      // displayError();
-    }
-  };
+      console.log('###', error.message);
+      if (error.message === 'forbidden' || error.message === 'unauthorized') {
+        console.log(1);
 
-  const logout = async () => {
-    const response = await fetch(CONFIG.logoutUrl, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    });
+        try {
+          await auth.refresh();
+        } catch (error) {
+          console.log('from init => try refresh:', error.message);
+          if (error.message === 'refresh failed') {
+            // Show login form
+            model.state.update({ view: 'login' });
+            view.renderLogin({ DOMString: DOMStrings.main });
+          }
+        }
+
+        await model.getLists({ API: true });
+        view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+        return;
+      }
+      if (error.message === 'no content') {
+        console.log(555);
+      } else {
+        console.log(error.message);
+        return;
+      }
+    }
   };
 
   const init = async () => {
@@ -270,31 +240,10 @@ const controller = (function () {
     // view.renderLogin({ DOMString: DOMStrings.main });
 
     // testing();
-    try {
-      await model.getLists({ API: true });
-    } catch (error) {
-      console.log('###', error.message);
-      if (error.message === 'forbidden' || error.message === 'unauthorized') {
-        console.log(1);
-        await refreshAuth();
-        await model.getLists({ API: true });
-        view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
-        return;
-      }
-      if (error.message === 'no content') {
-        console.log(555);
-      } else {
-        console.log(error.message);
-        return;
-      }
-    }
+
+    loadLists();
 
     view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
-
-  // For testing
-  return {
-    logout,
-  };
 })();
