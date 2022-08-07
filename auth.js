@@ -1,8 +1,14 @@
 const auth = (function () {
+  // const CONFIG = {
+  //   authUrl: 'http://localhost:3001/api/v1/auth',
+  //   refreshUrl: 'http://localhost:3001/api/v1/refresh',
+  //   logoutUrl: 'http://localhost:3001/api/v1/logout',
+  // };
+
   const CONFIG = {
-    authUrl: 'http://localhost:3001/api/v1/auth',
-    refreshUrl: 'http://localhost:3001/api/v1/refresh',
-    logoutUrl: 'http://localhost:3001/api/v1/logout',
+    authUrl: 'https://simjson.herokuapp.com/api/v1/auth',
+    refreshUrl: 'https://simjson.herokuapp.com/api/v1/refresh',
+    logoutUrl: 'https://simjson.herokuapp.com/api/v1/logout',
   };
 
   const login = async () => {

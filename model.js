@@ -1,4 +1,4 @@
-// Data structureli:k
+// Data structure
 
 let listsExample = [
   {
@@ -13,6 +13,8 @@ let listsExample = [
 ];
 
 const model = (function () {
+  // let apiRoot = 'http://localhost:3001/api/v1';
+  let apiRoot = 'https://simjson.herokuapp.com/api/v1';
   // DATA
   let lists = [];
   // let lists = listsExample;
@@ -61,10 +63,7 @@ const model = (function () {
       },
     };
 
-    const response = await fetch(
-      'http://localhost:3001/api/v1/json/lists',
-      fetchOpts
-    );
+    const response = await fetch(`${apiRoot}/json/lists`, fetchOpts);
     if (!response.ok) {
       if (response.status === 401) {
         throw new Error('unauthorized');
@@ -90,7 +89,7 @@ const model = (function () {
 
   const sendListsToAPI = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/v1/json/lists', {
+      const response = await fetch(`${apiRoot}/json/lists`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
