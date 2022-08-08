@@ -180,21 +180,6 @@ const controller = (function () {
     );
   };
 
-  const testing = () => {
-    const DS = DOMStrings.items;
-    const testData = [
-      { name: 'test-1' },
-      { name: 'test-2' },
-      { name: 'test-3' },
-      { name: 'test-4' },
-      { name: 'test-5' },
-    ];
-
-    testData.map((dp) => {
-      model.addList(dp);
-    });
-  };
-
   const loadLists = async () => {
     try {
       await model.getLists({ API: true });
