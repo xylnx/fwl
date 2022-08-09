@@ -1,23 +1,11 @@
 const auth = (function () {
-  // const CONFIG = {
-  //   authUrl: 'http://localhost:3001/api/v1/auth',
-  //   refreshUrl: 'http://localhost:3001/api/v1/refresh',
-  //   logoutUrl: 'http://localhost:3001/api/v1/logout',
-  // };
-
-  const CONFIG = {
-    authUrl: 'https://simjson.herokuapp.com/api/v1/auth',
-    refreshUrl: 'https://simjson.herokuapp.com/api/v1/refresh',
-    logoutUrl: 'https://simjson.herokuapp.com/api/v1/logout',
-  };
-
   const login = async () => {
     const user = model.state.user;
     const pwd = model.state.password;
     // console.log({ user }, { pwd });
 
     try {
-      const response = await fetch(CONFIG.authUrl, {
+      const response = await fetch(model.API.authUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -43,7 +31,7 @@ const auth = (function () {
   const refresh = async () => {
     console.log(2);
 
-    const response = await fetch(CONFIG.refreshUrl, {
+    const response = await fetch(model.API.refreshUrl, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -68,7 +56,7 @@ const auth = (function () {
   };
 
   const logout = async () => {
-    const response = await fetch(CONFIG.logoutUrl, {
+    const response = await fetch(model.API.logoutUrl, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

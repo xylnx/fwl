@@ -13,8 +13,33 @@ let listsExample = [
 ];
 
 const model = (function () {
-  // let apiRoot = 'http://localhost:3001/api/v1';
-  let apiRoot = 'https://simjson.herokuapp.com/api/v1';
+  // HELPER: figure out if in dev or production
+  const isDev = () => {
+    let dev = false;
+    if (typeof config !== 'undefined') {
+      dev = config.development;
+    }
+    return dev;
+  };
+
+  if (isDev()) {
+    API = {
+      root: 'http://localhost:3001/api/v1',
+      authUrl: 'http://localhost:3001/api/v1/auth',
+      refreshUrl: 'http://localhost:3001/api/v1/refresh',
+      logoutUrl: 'http://localhost:3001/api/v1/logout',
+    };
+  } else {
+    API = {
+      root: 'https://simjson.herokuapp.com/api/v1',
+      authUrl: 'https://simjson.herokuapp.com/api/v1/auth',
+      refreshUrl: 'https://simjson.herokuapp.com/api/v1/refresh',
+      logoutUrl: 'https://simjson.herokuapp.com/api/v1/logout',
+    };
+  }
+
+  console.log({ API });
+
   // DATA
   let lists = [];
   // let lists = listsExample;
@@ -63,7 +88,7 @@ const model = (function () {
       },
     };
 
-    const response = await fetch(`${apiRoot}/json/lists`, fetchOpts);
+    const response = await fetch(`${API.root}/json/lists`, fetchOpts);
     if (!response.ok) {
       if (response.status === 401) {
         throw new Error('unauthorized');
@@ -89,7 +114,7 @@ const model = (function () {
 
   const sendListsToAPI = async () => {
     try {
-      const response = await fetch(`${apiRoot}/json/lists`, {
+      const response = await fetch(`${API.root}/json/lists`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -219,5 +244,6 @@ const model = (function () {
     state,
     getListsFromAPI,
     sendListsToAPI,
+    API,
   };
 })();
