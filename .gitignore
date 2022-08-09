@@ -3,6 +3,7 @@ node_modules
 TD.md
 td.md
 dump.rdb
+config.js
 
 # Ignore vim swap files
 [._]*.s[a-v][a-z]
