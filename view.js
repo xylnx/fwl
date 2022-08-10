@@ -36,6 +36,16 @@ const view = (function () {
     return html;
   };
 
+  const insertHeading = (DOMString = '.header', heading = 'test') => {
+    const header = getElement(DOMString);
+    clearView(DOMString);
+    const html = generateHtml(templates.header, {
+      headingMain: heading,
+    });
+
+    header.insertAdjacentHTML('beforeend', html);
+  };
+
   /**
    * Adds the lists to the list view.
    * @param {Object} data -
@@ -95,5 +105,6 @@ const view = (function () {
     renderLogin,
     toggleInput,
     clearInputField,
+    insertHeading,
   };
 })();
