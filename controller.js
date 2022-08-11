@@ -2,6 +2,8 @@ const controller = (function () {
   const DOMStrings = {
     header: 'header',
     headerLower: '.header__lower',
+    btnAdd: '.control__add',
+    btnAddSvg: '.control__add svg',
     main: 'main',
     input: '.header__lower input',
     items: 'main',

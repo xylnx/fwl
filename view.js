@@ -11,14 +11,15 @@ const view = (function () {
     getElement(DOMString).value = '';
   };
 
-  const toggleInput = (DS, btnEl) => {
+  const toggleInput = (DS) => {
     const headerLower = view.getElement(DS.headerLower);
     headerLower.classList.toggle('hidden');
+    getElement(DS.btnAddSvg).classList.toggle('rotate');
     if (!headerLower.classList.contains('hidden')) {
-      const input = view.getElement(DS.input).focus();
+      view.getElement(DS.input).focus();
       return;
     }
-    btnEl.focus();
+    getElement(DS.btnAdd).focus();
   };
 
   /**

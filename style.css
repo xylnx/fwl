@@ -67,6 +67,7 @@ svg {
 .header svg {
   width: 3.2rem;
   height: 3.2rem;
+  transition: 0.4s transform ease-out;
 }
 
 .input__input,
@@ -258,4 +259,9 @@ svg {
 
 .hidden {
   display: none !important;
+}
+
+.rotate {
+  transform: rotate(405deg);
+  transition: 0.4s transform ease-out;
 }
