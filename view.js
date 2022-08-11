@@ -36,7 +36,7 @@ const view = (function () {
     return html;
   };
 
-  const insertHeading = (DOMString = '.header', heading = 'test') => {
+  const insertHeading = (heading = 'test', DOMString = '.header') => {
     const header = getElement(DOMString);
     clearView(DOMString);
     const html = generateHtml(templates.header, {
@@ -58,6 +58,9 @@ const view = (function () {
     getElement('.control__back-to-overview').classList.add('hidden');
 
     if (!lists) return;
+
+    insertHeading('Available Lists');
+
     lists.map((list) => {
       const html = generateHtml(templates.list, {
         listName: list.listName,
@@ -71,6 +74,9 @@ const view = (function () {
     const { list, DOMString } = data;
     console.log('renderList:', { list });
     clearView(DOMString);
+
+    // Show list name in Header
+    insertHeading(list.listName);
 
     // Go back to overview btn
     getElement('.control__back-to-overview').classList.remove('hidden');
@@ -93,6 +99,7 @@ const view = (function () {
 
   const renderLogin = ({ DOMString }) => {
     clearView(DOMString);
+    insertHeading('LOGIN');
     const html = generateHtml(templates.login);
     getElement(DOMString).insertAdjacentHTML('beforeend', html);
   };

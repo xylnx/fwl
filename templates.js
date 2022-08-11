@@ -108,7 +108,7 @@ const templates = (function () {
 
   const login = `
     <form class="login">
-      <p class="login__msg">Please login!</p>
+      <p class="login__msg">Please sign in!</p>
       <label class="login__label">
         <span>User name</span>
         <input type="text" class="login__input login__input--user">
