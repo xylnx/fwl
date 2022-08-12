@@ -15,8 +15,8 @@ const controller = (function () {
     return window.confirm(`Delete ${item}?`);
   };
 
-  const handleAddBtn = (e) => {
-    view.toggleInput(DOMStrings, e.target);
+  const handleAddBtn = () => {
+    view.toggleInput(DOMStrings);
   };
 
   const handleSubmit = () => {
