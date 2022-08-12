@@ -40,6 +40,7 @@ const controller = (function () {
     view.clearInputField(DOMStrings.input);
     // render items
     view.renderList({ list: list, DOMString: DOMStrings.items });
+    view.toggleInput(DOMStrings);
   };
 
   const handleLoginSubmit = async () => {
