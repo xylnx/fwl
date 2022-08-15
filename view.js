@@ -1,3 +1,8 @@
+/**
+ * @module view
+ * @author xylnx
+ * @see <a href="https://github.com/xylnx">https://github.com/xylnx</a>
+ */
 const view = (function () {
   const getElement = (domString) => {
     return document.querySelector(domString);
@@ -11,6 +16,10 @@ const view = (function () {
     getElement(DOMString).value = '';
   };
 
+  /**
+   * Toggles the visibility of the input form
+   * @memberof module:view
+   */
   const toggleInput = (DS) => {
     const headerLower = view.getElement(DS.headerLower);
     headerLower.classList.toggle('hidden');

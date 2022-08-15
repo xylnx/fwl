@@ -1,4 +1,15 @@
+/**
+ * @module controller
+ * @description Catches user input and triggers {@link auth}, {@link model} and {@link module:view} functions accordingly.
+ * @author xylnx
+ * @see <a href="https://github.com/xylnx">https://github.com/xylnx</a>
+ */
 const controller = (function () {
+  /**
+   * Contains html selectors, which are used to query elements.
+   * @type {Object<string, string>}
+   * @memberof module:controller
+   */
   const DOMStrings = {
     header: 'header',
     headerLower: '.header__lower',
@@ -11,25 +22,56 @@ const controller = (function () {
     loginPw: '.login__input--pw',
   };
 
-  const confirmDelete = (item) => {
-    return window.confirm(`Delete ${item}?`);
+  /**
+   * Triggers a dialog modal asking the user to confirm deleting an item.
+   * @param {string} itemName - The name of a list or an item
+   * @memberof module:controller
+   *
+   */
+  const confirmDelete = (itemName) => {
+    return window.confirm(`Delete ${itemName}?`);
   };
 
+  /**
+   * Triggers {@link module:view.toggleInput}, which toggles the visibility of the input form.
+   * @memberof module:controller
+   */
   const handleAddBtn = () => {
     view.toggleInput(DOMStrings);
   };
 
+  /**
+   * Handles a form submit in the `overview view` and creates a new list if successful. It uses and triggers functions in {@link module:view} and {@link module:model}
+   * @see {module:view.getElement} -- queries elements
+   * @see {module:model.addList} -- adds a list to the data structure
+   * @see {module:view.clearInputField} -- clears the input form
+   * @see {module:view.renderLists} -- (re)renders the lists view
+   * @memberof module:controller
+   */
   const handleSubmit = () => {
     const input = view.getElement(DOMStrings.input);
+
+    // Stop here, if the the form is empty
     if (!input.value) return;
 
     // Update model
     model.addList({ name: input.value });
     view.clearInputField(DOMStrings.input);
-    // render lists
+
+    // Render listsj
     view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
   };
 
+  /**
+   * Handles a form submit in the `list view`. Adds a new item to the list if successful. It uses and triggers functions in {@link module:view} and {@link module:model}
+   * @see {module:model.getList} -- retrieves a list by ID
+   * @see {module:view.getElement} -- queries elements
+   * @see {module:model.item.add} -- adds an item to a list
+   * @see {module:view.clearInputField} -- clears the input form
+   * @see {module:view.renderLists} -- (re)renders the lists view
+   * @see {module:view.toggleInput} -- toggles visibility of the input form
+   * @memberof module:controller
+   */
   const handleItemSubmit = () => {
     const list = model.getList(model.state.listID);
     const input = view.getElement(DOMStrings.input);
@@ -38,11 +80,23 @@ const controller = (function () {
     // Update model
     model.item.add({ name: input.value });
     view.clearInputField(DOMStrings.input);
-    // render items
+
+    // Render items
     view.renderList({ list: list, DOMString: DOMStrings.items });
+
+    // Open input again
     view.toggleInput(DOMStrings);
   };
 
+  /**
+   * Handles a form submit in the `login view`. Logs the user in and renders their lists, if successfull.
+   * It uses and triggers functions in {@link module:view} and {@link module:model}
+   * @see {module:view.getElement} -- queries elements
+   * @see {module:model.state.update} -- updates application state
+   * @see {module:auth.login} -- authenticates the user
+   * @see {module:controller.loadLists} -- loads list data from an API
+   * @see {module:view.renderLists} -- (re)renders the lists view
+   */
   const handleLoginSubmit = async () => {
     const user = view.getElement(DOMStrings.loginUser).value;
     const pw = view.getElement(DOMStrings.loginPw).value;
