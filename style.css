@@ -27,6 +27,17 @@ html {
   --border-radius: 2px;
 }
 
+/* push footer to the bottom of the page */
+body {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
 body {
   background-color: var(--clr-bg);
   color: var(--clr-text-400);
@@ -38,10 +49,19 @@ h1 {
   font-size: 3.2rem;
 }
 
+a {
+  color: inherit;
+  font-size: inherit;
+  text-underline-offset: 4px;
+}
+
 .main {
-  max-width: 48rem;
-  padding: 0.8rem;
   margin: 0 auto;
+  margin-top: 1.6rem;
+}
+
+.main .btn {
+  display: flex;
 }
 
 /* ATOMS */
@@ -173,6 +193,14 @@ svg {
   color: var(--clr-accent);
 }
 
+.footer {
+  background-color: var(--clr-primary-400);
+  margin-top: 1.6rem;
+  padding: 1.6em;
+  color: var(--clr-text-400);
+  text-align: right;
+}
+
 /* List items */
 
 .list-item__actions__status--do {
@@ -193,16 +221,6 @@ svg {
 
 .list-item[data-isdone='true'] .list-item__name {
   text-decoration: line-through;
-}
-
-.main {
-  margin-top: 1.6rem;
-  display: grid;
-  gap: var(--gap);
-}
-
-.main .btn {
-  display: flex;
 }
 
 /* LOGIN */
@@ -247,6 +265,12 @@ svg {
 }
 
 /* UTILITIES */
+.grid-container {
+  display: grid;
+  grid-gap: var(--gap);
+  width: 48rem;
+}
+
 .vis-hidden {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
