@@ -62,9 +62,13 @@ const view = (function () {
    */
   const renderLists = (data) => {
     const { lists, clearHtml, DOMString } = data;
+
+    const parent = document.createElement('div');
+    parent.classList.add('grid-container');
+
     clearView(DOMString);
 
-    // Hide go back to overview btn
+    // Hide `go back to overview` btn
     getElement('.control__back-to-overview').classList.add('hidden');
 
     if (!lists) return;
@@ -76,13 +80,19 @@ const view = (function () {
         listName: list.listName,
         listID: list.listID,
       });
-      getElement(DOMString).insertAdjacentHTML('beforeend', html);
+      parent.insertAdjacentHTML('beforeend', html);
     });
+
+    getElement(DOMString).appendChild(parent);
   };
 
   const renderList = (data) => {
     const { list, DOMString } = data;
-    console.log('renderList:', { list });
+
+    // Create a container for list items
+    const parent = document.createElement('div');
+    parent.classList.add('grid-container');
+
     clearView(DOMString);
 
     // Show list name in Header
@@ -103,8 +113,9 @@ const view = (function () {
         itemName: item.itemName,
         isDone: item.isDone,
       });
-      getElement(DOMString).insertAdjacentHTML('beforeend', html);
+      parent.insertAdjacentHTML('beforeend', html);
     });
+    getElement(DOMString).appendChild(parent);
   };
 
   const renderLogin = ({ DOMString }) => {
