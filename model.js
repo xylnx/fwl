@@ -2,12 +2,12 @@
 
 let listsExample = [
   {
-    listID: '9999',
-    listName: 'my list',
+    listID: "9999",
+    listName: "my list",
     listItems: [
-      { itemID: '1234', itemName: 'my item name 1', isDone: true },
-      { itemID: '1235', itemName: 'my item name 2', isDone: false },
-      { itemID: '1236', itemName: 'my item name 3', isDone: true },
+      { itemID: "1234", itemName: "my item name 1", isDone: true },
+      { itemID: "1235", itemName: "my item name 2", isDone: false },
+      { itemID: "1236", itemName: "my item name 3", isDone: true },
     ],
   },
 ];
@@ -16,7 +16,7 @@ const model = (function () {
   // HELPER: figure out if in dev or production
   const isDev = () => {
     let dev = false;
-    if (typeof config !== 'undefined') {
+    if (typeof config !== "undefined") {
       dev = config.development;
     }
     return dev;
@@ -24,17 +24,17 @@ const model = (function () {
 
   if (isDev()) {
     API = {
-      root: 'http://localhost:3001/api/v1',
-      authUrl: 'http://localhost:3001/api/v1/auth',
-      refreshUrl: 'http://localhost:3001/api/v1/refresh',
-      logoutUrl: 'http://localhost:3001/api/v1/logout',
+      root: "http://localhost:3001/api/v1",
+      authUrl: "http://localhost:3001/api/v1/auth",
+      refreshUrl: "http://localhost:3001/api/v1/refresh",
+      logoutUrl: "http://localhost:3001/api/v1/logout",
     };
   } else {
     API = {
-      root: 'https://simjson.herokuapp.com/api/v1',
-      authUrl: 'https://simjson.herokuapp.com/api/v1/auth',
-      refreshUrl: 'https://simjson.herokuapp.com/api/v1/refresh',
-      logoutUrl: 'https://simjson.herokuapp.com/api/v1/logout',
+      root: "https://simjson.herokuapp.com/api/v1",
+      authUrl: "https://simjson.herokuapp.com/api/v1/auth",
+      refreshUrl: "https://simjson.herokuapp.com/api/v1/refresh",
+      logoutUrl: "https://simjson.herokuapp.com/api/v1/logout",
     };
   }
 
@@ -43,9 +43,9 @@ const model = (function () {
   // DATA
   let lists = [];
   // let lists = listsExample;
-  let listsLSKey = 'fwlLists';
+  let listsLSKey = "fwlLists";
   let state = {
-    view: 'overview',
+    view: "overview",
     listID: null,
     itemID: null,
     user: null,
@@ -67,7 +67,7 @@ const model = (function () {
       this.user = user;
       this.password = password;
       this.authToken = authToken;
-      console.log('STATE:', this);
+      console.log("STATE:", this);
     },
   };
 
@@ -80,34 +80,38 @@ const model = (function () {
   };
 
   const getListsFromAPI = async () => {
+    console.log(99);
     const fetchOpts = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${state.authToken}`,
       },
     };
 
+    console.log(44);
     const response = await fetch(`${API.root}/json/lists`, fetchOpts);
+    console.log(55);
+    console.log(response);
     if (!response.ok) {
       if (response.status === 401) {
-        throw new Error('unauthorized');
+        throw new Error("unauthorized");
       }
       if (response.status === 403) {
-        throw new Error('forbidden');
+        throw new Error("forbidden");
       }
       throw new Error(`${response.status} ${response.statusText}`);
     }
     // authorized but no content here
     if (response.status === 204) {
-      console.log('no content here, create your first list');
+      console.log("no content here, create your first list");
       model.lists = [];
-      throw new Error('no content');
+      throw new Error("no content");
     }
 
     console.log(response);
     const data = await response.json();
-    console.log('api response: ', response);
+    console.log("api response: ", response);
     model.lists = data.data.lists;
     console.log(model.lists);
   };
@@ -115,24 +119,24 @@ const model = (function () {
   const sendListsToAPI = async () => {
     try {
       const response = await fetch(`${API.root}/json/lists`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${state.authToken}`,
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ lists: model.lists }),
       });
       console.log(response);
     } catch (error) {
-      console.log('from model.sendListsToAPI: ', error);
+      console.log("from model.sendListsToAPI: ", error);
     }
   };
 
   const getListsFromLS = () => {
     // Return lists stored in local storage
     const restoredLists = readFromLocalStorage(listsLSKey);
-    if (!restoredLists) return;
+    if (!restoredLists) return null;
     lists = restoredLists;
     return lists;
   };
@@ -243,6 +247,7 @@ const model = (function () {
     getLists,
     state,
     getListsFromAPI,
+    getListsFromLS,
     sendListsToAPI,
     API,
   };

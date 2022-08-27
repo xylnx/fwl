@@ -121,7 +121,7 @@ const templates = (function () {
 
     </form>
     <div class="login login--alternatives">
-      <p class="login__msg login__msg--options">Or pick another option:</p> <button type="button" class="btn login__local-data">Use existing local data</button>
+      <p class="login__msg login__msg--options">Or pick another option:</p> <button type="button" class="btn login__local-data {%hidden%}">Use existing local data</button>
       <button type="button" class="btn login__try-me"><span>Try</span> without logging in</button>
     </div>
   `;
