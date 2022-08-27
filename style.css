@@ -211,25 +211,35 @@ svg {
   color: lime;
 }
 
-.list-item[data-isdone='true'] .list-item__actions__status--do {
+.list-item[data-isdone="true"] .list-item__actions__status--do {
   display: none;
 }
 
-.list-item[data-isdone='false'] .list-item__actions__status--done {
+.list-item[data-isdone="false"] .list-item__actions__status--done {
   display: none;
 }
 
-.list-item[data-isdone='true'] .list-item__name {
+.list-item[data-isdone="true"] .list-item__name {
   text-decoration: line-through;
 }
 
 /* LOGIN */
+.login {
+  padding: 0 1.6rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 32rem;
+}
 .login__msg {
-  margin: 1.6rem 0 4.4rem 0;
-  text-align: center;
+  margin: 1.6rem 0 3.2rem 0;
   font-size: var(--fs-800);
   font-weight: 600;
   color: var(--clr-accent);
+}
+
+.login__msg--options {
+  font-size: var(--fs-600);
+  margin: 2.4rem 0 1.6rem 0;
 }
 
 .login__input {
@@ -248,6 +258,7 @@ svg {
 
 .login .btn {
   display: inline;
+  margin-bottom: 8px;
 }
 
 .login .btn:hover {

@@ -118,8 +118,12 @@ const templates = (function () {
         <input type="password" class="login__input login__input--pw">
       </label>
       <button type="button" class="btn login__submit">Log me in!</button>
-      <button type="button" class="btn login__try-me"><span>Try</span> without logging in</button>
+
     </form>
+    <div class="login login--alternatives">
+      <p class="login__msg login__msg--options">Or pick another option:</p> <button type="button" class="btn login__local-data">Use existing local data</button>
+      <button type="button" class="btn login__try-me"><span>Try</span> without logging in</button>
+    </div>
   `;
 
   return {
