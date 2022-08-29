@@ -225,10 +225,12 @@ svg {
 
 /* LOGIN */
 .login {
+  /*
   padding: 0 1.6rem;
   display: flex;
   flex-direction: column;
   max-width: 32rem;
+  */
 }
 .login__msg {
   margin: 1.6rem 0 3.2rem 0;
@@ -256,6 +258,16 @@ svg {
   margin-bottom: 0.8rem;
 }
 
+.login__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.login__actions .btn {
+  flex: 1 0 19rem;
+}
+
 .login .btn {
   display: inline;
   margin-bottom: 8px;
@@ -279,7 +291,8 @@ svg {
 .grid-container {
   display: grid;
   grid-gap: var(--gap);
-  width: 48rem;
+  max-width: 48rem;
+  width: 90vw;
 }
 
 .vis-hidden {
