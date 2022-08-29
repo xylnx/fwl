@@ -115,6 +115,11 @@ const controller = (function () {
   };
 
   const handleTryOut = () => {
+    // Try out will store lists in the same location potential existing data is stored in, so check:
+    if (model.state.isLocalData) {
+      if (!confirmDelete("existing local Data")) return;
+    }
+
     const curLists = model.getLists();
     model.state.update({ view: "overview" });
     view.renderLists({
