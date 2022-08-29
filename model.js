@@ -46,6 +46,8 @@ const model = (function () {
   let listsLSKey = "fwlLists";
   let state = {
     view: "overview",
+    isLocalData: false,
+    useAPI: false,
     listID: null,
     itemID: null,
     user: null,
@@ -60,6 +62,8 @@ const model = (function () {
         user = this.user,
         password = this.password,
         authToken = this.authToken,
+        isLocalData = this.isLocalData,
+        isAPI = this.isAPI,
       } = args;
       this.view = view;
       this.listID = listID;
@@ -67,6 +71,8 @@ const model = (function () {
       this.user = user;
       this.password = password;
       this.authToken = authToken;
+      this.isLocalData = isLocalData;
+      this.isAPI = isAPI;
       console.log("STATE:", this);
     },
   };
@@ -77,6 +83,11 @@ const model = (function () {
     if (!LS && !API) return model.lists;
     if (LS) return getListsFromLS();
     if (API) return getListsFromAPI();
+  };
+
+  const setLists = () => {
+    if (state.isAPI) sendListsToAPI();
+    if (!state.isAPI) saveListsToLS();
   };
 
   const getListsFromAPI = async () => {
@@ -137,11 +148,11 @@ const model = (function () {
     // Return lists stored in local storage
     const restoredLists = readFromLocalStorage(listsLSKey);
     if (!restoredLists) return null;
-    lists = restoredLists;
-    return lists;
+    model.lists = restoredLists;
+    return model.lists;
   };
   const saveListsToLS = () => {
-    writeToLocalStorage({ [listsLSKey]: lists });
+    writeToLocalStorage({ [listsLSKey]: model.lists });
   };
 
   /** Create a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
@@ -184,8 +195,7 @@ const model = (function () {
       listName: name,
       listItems: items,
     });
-    // writeToLocalStorage({ [listsLSKey]: lists });
-    sendListsToAPI();
+    setLists();
   };
 
   const getListIndex = (id) => {
@@ -207,8 +217,7 @@ const model = (function () {
   const removeList = (id) => {
     const index = getListIndex(id);
     model.lists.splice(index, 1);
-    // writeToLocalStorage({ [listsLSKey]: lists });
-    sendListsToAPI();
+    setLists();
   };
 
   const item = {
@@ -224,8 +233,7 @@ const model = (function () {
         itemID: id,
         isDone: false,
       });
-      // writeToLocalStorage({ [listsLSKey]: lists });
-      sendListsToAPI();
+      setLists();
     },
     statusUpdate(args) {
       const { isDone } = args;
@@ -234,8 +242,7 @@ const model = (function () {
 
       // access the list + change item status
       model.lists[listIndex].listItems[itemIndex].isDone = isDone;
-      // writeToLocalStorage({ [listsLSKey]: lists });
-      sendListsToAPI();
+      setLists();
     },
   };
 
