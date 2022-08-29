@@ -129,6 +129,15 @@ const controller = (function () {
     view.toggleInput(DOMStrings, document.querySelector(".controls__add"));
   };
 
+  const handleUseWithExistingLocalData = () => {
+    const curLists = model.getLists({ LS: true });
+    model.state.update({ view: "overview" });
+    view.renderLists({
+      lists: curLists,
+      DOMString: DOMStrings.main,
+    });
+  };
+
   const handleListDelete = (target) => {
     const dataSet = target.parentNode.parentNode.dataset;
     const ID = dataSet.id;
@@ -180,6 +189,9 @@ const controller = (function () {
           }
           if (e.target.classList.contains("login__try-me")) {
             handleTryOut();
+          }
+          if (e.target.classList.contains("login__local-data")) {
+            handleUseWithExistingLocalData();
           }
         }
         // LIST VIEW
