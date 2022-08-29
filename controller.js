@@ -259,12 +259,9 @@ const controller = (function () {
       await model.getLists({ API: true });
     } catch (error) {
       if (error.message === "forbidden" || error.message === "unauthorized") {
-        console.log(1);
-
         try {
           await auth.refresh();
         } catch (error) {
-          console.log(22);
           /*
           console.log('from init => try refresh:', error.message);
           if (error.message === 'refresh failed') {
@@ -280,7 +277,6 @@ const controller = (function () {
         return;
       }
       if (error.message === "no content") {
-        console.log(555);
       } else {
         console.log(error.message);
         return;
