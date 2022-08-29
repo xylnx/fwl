@@ -278,8 +278,16 @@ const controller = (function () {
   const checkForLocalData = () => {
     if (!model.getListsFromLS()) {
       model.state.update({ view: "login" });
-      view.renderLogin({ DOMString: DOMStrings.main });
+    } else {
+      model.state.update({ view: "login", isLocalData: true });
+      // calling model.getListsFromLS (see above) writes data into model.list
+      // so we need to reset the lists in case the 'Try out' option will be choosen
+      model.lists = [];
     }
+    view.renderLogin({
+      DOMString: DOMStrings.main,
+      isLocalData: model.state.isLocalData, // if true an optional btn is displayed `use with local data`
+    });
   };
 
   const init = async () => {
