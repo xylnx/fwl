@@ -52,7 +52,6 @@ const model = (function () {
     itemID: null,
     user: null,
     password: null,
-    // authToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5Eb2UiLCJpYXQiOjE2NTkwODIxNjMsImV4cCI6MTY1OTE2ODU2M30.AA-KGs_DdC-m_DsI--MsV1V_jHCVcL56pGIRCiEkqII',
     authToken: null,
     update(args) {
       const {
@@ -78,7 +77,6 @@ const model = (function () {
   };
 
   const getLists = (opts = {}) => {
-    console.log(3);
     const { LS, API } = opts;
     if (!LS && !API) return model.lists;
     if (LS) return getListsFromLS();
@@ -91,7 +89,6 @@ const model = (function () {
   };
 
   const getListsFromAPI = async () => {
-    console.log(99);
     const fetchOpts = {
       method: "GET",
       headers: {
@@ -100,9 +97,7 @@ const model = (function () {
       },
     };
 
-    console.log(44);
     const response = await fetch(`${API.root}/json/lists`, fetchOpts);
-    console.log(55);
     console.log(response);
     if (!response.ok) {
       if (response.status === 401) {
