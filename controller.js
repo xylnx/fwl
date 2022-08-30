@@ -291,9 +291,7 @@ const controller = (function () {
         return;
       }
     } finally {
-      // Show login form
-      model.state.update({ view: "login" });
-      view.renderLogin({ DOMString: DOMStrings.main });
+      return null;
     }
   };
 
