@@ -62,7 +62,7 @@ const model = (function () {
         password = this.password,
         authToken = this.authToken,
         isLocalData = this.isLocalData,
-        isAPI = this.isAPI,
+        useAPI = this.useAPI,
       } = args;
       this.view = view;
       this.listID = listID;
@@ -71,7 +71,7 @@ const model = (function () {
       this.password = password;
       this.authToken = authToken;
       this.isLocalData = isLocalData;
-      this.isAPI = isAPI;
+      this.useAPI = useAPI;
       console.log("STATE:", this);
     },
   };
@@ -84,8 +84,8 @@ const model = (function () {
   };
 
   const setLists = () => {
-    if (state.isAPI) sendListsToAPI();
-    if (!state.isAPI) saveListsToLS();
+    if (state.useAPI) sendListsToAPI();
+    if (!state.useAPI) saveListsToLS();
   };
 
   const getListsFromAPI = async () => {
