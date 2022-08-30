@@ -2,12 +2,12 @@
 
 let listsExample = [
   {
-    listID: '9999',
-    listName: 'my list',
+    listID: "9999",
+    listName: "my list",
     listItems: [
-      { itemID: '1234', itemName: 'my item name 1', isDone: true },
-      { itemID: '1235', itemName: 'my item name 2', isDone: false },
-      { itemID: '1236', itemName: 'my item name 3', isDone: true },
+      { itemID: "1234", itemName: "my item name 1", isDone: true },
+      { itemID: "1235", itemName: "my item name 2", isDone: false },
+      { itemID: "1236", itemName: "my item name 3", isDone: true },
     ],
   },
 ];
@@ -16,7 +16,7 @@ const model = (function () {
   // HELPER: figure out if in dev or production
   const isDev = () => {
     let dev = false;
-    if (typeof config !== 'undefined') {
+    if (typeof config !== "undefined") {
       dev = config.development;
     }
     return dev;
@@ -24,17 +24,17 @@ const model = (function () {
 
   if (isDev()) {
     API = {
-      root: 'http://localhost:3001/api/v1',
-      authUrl: 'http://localhost:3001/api/v1/auth',
-      refreshUrl: 'http://localhost:3001/api/v1/refresh',
-      logoutUrl: 'http://localhost:3001/api/v1/logout',
+      root: "http://localhost:3001/api/v1",
+      authUrl: "http://localhost:3001/api/v1/auth",
+      refreshUrl: "http://localhost:3001/api/v1/refresh",
+      logoutUrl: "http://localhost:3001/api/v1/logout",
     };
   } else {
     API = {
-      root: 'https://simjson.herokuapp.com/api/v1',
-      authUrl: 'https://simjson.herokuapp.com/api/v1/auth',
-      refreshUrl: 'https://simjson.herokuapp.com/api/v1/refresh',
-      logoutUrl: 'https://simjson.herokuapp.com/api/v1/logout',
+      root: "https://simjson.herokuapp.com/api/v1",
+      authUrl: "https://simjson.herokuapp.com/api/v1/auth",
+      refreshUrl: "https://simjson.herokuapp.com/api/v1/refresh",
+      logoutUrl: "https://simjson.herokuapp.com/api/v1/logout",
     };
   }
 
@@ -43,14 +43,15 @@ const model = (function () {
   // DATA
   let lists = [];
   // let lists = listsExample;
-  let listsLSKey = 'fwlLists';
+  let listsLSKey = "fwlLists";
   let state = {
-    view: 'overview',
+    view: "overview",
+    isLocalData: false,
+    useAPI: false,
     listID: null,
     itemID: null,
     user: null,
     password: null,
-    // authToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5Eb2UiLCJpYXQiOjE2NTkwODIxNjMsImV4cCI6MTY1OTE2ODU2M30.AA-KGs_DdC-m_DsI--MsV1V_jHCVcL56pGIRCiEkqII',
     authToken: null,
     update(args) {
       const {
@@ -60,6 +61,8 @@ const model = (function () {
         user = this.user,
         password = this.password,
         authToken = this.authToken,
+        isLocalData = this.isLocalData,
+        useAPI = this.useAPI,
       } = args;
       this.view = view;
       this.listID = listID;
@@ -67,47 +70,54 @@ const model = (function () {
       this.user = user;
       this.password = password;
       this.authToken = authToken;
-      console.log('STATE:', this);
+      this.isLocalData = isLocalData;
+      this.useAPI = useAPI;
+      console.log("STATE:", this);
     },
   };
 
   const getLists = (opts = {}) => {
-    console.log(3);
     const { LS, API } = opts;
     if (!LS && !API) return model.lists;
     if (LS) return getListsFromLS();
     if (API) return getListsFromAPI();
   };
 
+  const setLists = () => {
+    if (state.useAPI) sendListsToAPI();
+    if (!state.useAPI) saveListsToLS();
+  };
+
   const getListsFromAPI = async () => {
     const fetchOpts = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${state.authToken}`,
       },
     };
 
     const response = await fetch(`${API.root}/json/lists`, fetchOpts);
+    console.log(response);
     if (!response.ok) {
       if (response.status === 401) {
-        throw new Error('unauthorized');
+        throw new Error("unauthorized");
       }
       if (response.status === 403) {
-        throw new Error('forbidden');
+        throw new Error("forbidden");
       }
       throw new Error(`${response.status} ${response.statusText}`);
     }
     // authorized but no content here
     if (response.status === 204) {
-      console.log('no content here, create your first list');
+      console.log("no content here, create your first list");
       model.lists = [];
-      throw new Error('no content');
+      throw new Error("no content");
     }
 
     console.log(response);
     const data = await response.json();
-    console.log('api response: ', response);
+    console.log("api response: ", response);
     model.lists = data.data.lists;
     console.log(model.lists);
   };
@@ -115,29 +125,29 @@ const model = (function () {
   const sendListsToAPI = async () => {
     try {
       const response = await fetch(`${API.root}/json/lists`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${state.authToken}`,
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ lists: model.lists }),
       });
       console.log(response);
     } catch (error) {
-      console.log('from model.sendListsToAPI: ', error);
+      console.log("from model.sendListsToAPI: ", error);
     }
   };
 
   const getListsFromLS = () => {
     // Return lists stored in local storage
     const restoredLists = readFromLocalStorage(listsLSKey);
-    if (!restoredLists) return;
-    lists = restoredLists;
-    return lists;
+    if (!restoredLists) return null;
+    model.lists = restoredLists;
+    return model.lists;
   };
   const saveListsToLS = () => {
-    writeToLocalStorage({ [listsLSKey]: lists });
+    writeToLocalStorage({ [listsLSKey]: model.lists });
   };
 
   /** Create a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
@@ -180,8 +190,7 @@ const model = (function () {
       listName: name,
       listItems: items,
     });
-    // writeToLocalStorage({ [listsLSKey]: lists });
-    sendListsToAPI();
+    setLists();
   };
 
   const getListIndex = (id) => {
@@ -203,8 +212,7 @@ const model = (function () {
   const removeList = (id) => {
     const index = getListIndex(id);
     model.lists.splice(index, 1);
-    // writeToLocalStorage({ [listsLSKey]: lists });
-    sendListsToAPI();
+    setLists();
   };
 
   const item = {
@@ -220,8 +228,7 @@ const model = (function () {
         itemID: id,
         isDone: false,
       });
-      // writeToLocalStorage({ [listsLSKey]: lists });
-      sendListsToAPI();
+      setLists();
     },
     statusUpdate(args) {
       const { isDone } = args;
@@ -230,8 +237,7 @@ const model = (function () {
 
       // access the list + change item status
       model.lists[listIndex].listItems[itemIndex].isDone = isDone;
-      // writeToLocalStorage({ [listsLSKey]: lists });
-      sendListsToAPI();
+      setLists();
     },
   };
 
@@ -243,6 +249,7 @@ const model = (function () {
     getLists,
     state,
     getListsFromAPI,
+    getListsFromLS,
     sendListsToAPI,
     API,
   };

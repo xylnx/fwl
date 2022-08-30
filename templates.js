@@ -63,7 +63,7 @@ const templates = (function () {
         <span class="vis-hidden">
           {%labelHeaderInput%}
         </span>
-        <input type="text" class="input__input"/>
+        <input type="text" class="input__input" placeholder="{%placeholder%}"/>
         <button type="button" class="btn input__submit">Add</button>
       </label>
     </form>
@@ -107,7 +107,7 @@ const templates = (function () {
   `;
 
   const login = `
-    <form class="login">
+    <form class="login grid-container">
       <p class="login__msg">Please sign in!</p>
       <label class="login__label">
         <span>User name</span>
@@ -118,8 +118,16 @@ const templates = (function () {
         <input type="password" class="login__input login__input--pw">
       </label>
       <button type="button" class="btn login__submit">Log me in!</button>
-      <button type="button" class="btn login__try-me"><span>Try</span> without logging in</button>
+
     </form>
+    <div class="login login--alternatives grid-container">
+    
+      <p class="login__msg login__msg--options">Or pick another option:</p>
+      <div class="login__actions">
+        <button type="button" class="btn login__local-data {%hidden%}">Use existing local data</button>
+        <button type="button" class="btn login__try-me"><span>Try</span> without logging in</button>
+      </div>
+    </div>
   `;
 
   return {

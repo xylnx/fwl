@@ -9,11 +9,11 @@ const view = (function () {
   };
 
   const clearView = (DOMString) => {
-    getElement(DOMString).innerHTML = '';
+    getElement(DOMString).innerHTML = "";
   };
 
   const clearInputField = (DOMString) => {
-    getElement(DOMString).value = '';
+    getElement(DOMString).value = "";
   };
 
   /**
@@ -22,9 +22,9 @@ const view = (function () {
    */
   const toggleInput = (DS) => {
     const headerLower = view.getElement(DS.headerLower);
-    headerLower.classList.toggle('hidden');
-    getElement(DS.btnAddSvg).classList.toggle('rotate');
-    if (!headerLower.classList.contains('hidden')) {
+    headerLower.classList.toggle("hidden");
+    getElement(DS.btnAddSvg).classList.toggle("rotate");
+    if (!headerLower.classList.contains("hidden")) {
       view.getElement(DS.input).focus();
       return;
     }
@@ -46,14 +46,14 @@ const view = (function () {
     return html;
   };
 
-  const insertHeading = (heading = 'test', DOMString = '.header') => {
+  const insertHeading = (heading = "test", DOMString = ".header") => {
     const header = getElement(DOMString);
     clearView(DOMString);
     const html = generateHtml(templates.header, {
       headingMain: heading,
     });
 
-    header.insertAdjacentHTML('beforeend', html);
+    header.insertAdjacentHTML("beforeend", html);
   };
 
   /**
@@ -63,24 +63,24 @@ const view = (function () {
   const renderLists = (data) => {
     const { lists, clearHtml, DOMString } = data;
 
-    const parent = document.createElement('div');
-    parent.classList.add('grid-container');
+    const parent = document.createElement("div");
+    parent.classList.add("grid-container");
 
     clearView(DOMString);
 
     // Hide `go back to overview` btn
-    getElement('.control__back-to-overview').classList.add('hidden');
+    getElement(".control__back-to-overview").classList.add("hidden");
 
     if (!lists) return;
 
-    insertHeading('Available Lists');
+    insertHeading("Available Lists");
 
     lists.map((list) => {
       const html = generateHtml(templates.list, {
         listName: list.listName,
         listID: list.listID,
       });
-      parent.insertAdjacentHTML('beforeend', html);
+      parent.insertAdjacentHTML("beforeend", html);
     });
 
     getElement(DOMString).appendChild(parent);
@@ -90,8 +90,8 @@ const view = (function () {
     const { list, DOMString } = data;
 
     // Create a container for list items
-    const parent = document.createElement('div');
-    parent.classList.add('grid-container');
+    const parent = document.createElement("div");
+    parent.classList.add("grid-container");
 
     clearView(DOMString);
 
@@ -99,11 +99,11 @@ const view = (function () {
     insertHeading(list.listName);
 
     // Go back to overview btn
-    getElement('.control__back-to-overview').classList.remove('hidden');
+    getElement(".control__back-to-overview").classList.remove("hidden");
 
     // Check if there are any items in the list
     if (list.listItems === null) {
-      console.log('there are no list items');
+      console.log("there are no list items");
       return;
     }
     // Render existing items
@@ -113,16 +113,17 @@ const view = (function () {
         itemName: item.itemName,
         isDone: item.isDone,
       });
-      parent.insertAdjacentHTML('beforeend', html);
+      parent.insertAdjacentHTML("beforeend", html);
     });
     getElement(DOMString).appendChild(parent);
   };
 
-  const renderLogin = ({ DOMString }) => {
+  const renderLogin = ({ DOMString, isLocalData = false }) => {
+    const hidden = isLocalData ? "" : "hidden";
     clearView(DOMString);
-    insertHeading('LOGIN');
-    const html = generateHtml(templates.login);
-    getElement(DOMString).insertAdjacentHTML('beforeend', html);
+    insertHeading("LOGIN");
+    const html = generateHtml(templates.login, { hidden: hidden });
+    getElement(DOMString).insertAdjacentHTML("beforeend", html);
   };
 
   return {
