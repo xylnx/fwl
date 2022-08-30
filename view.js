@@ -124,7 +124,6 @@ const view = (function () {
     insertHeading("LOGIN");
     const html = generateHtml(templates.login, { hidden: hidden });
     getElement(DOMString).insertAdjacentHTML("beforeend", html);
-    console.log(1);
   };
 
   return {
