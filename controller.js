@@ -178,10 +178,12 @@ const controller = (function () {
 
   const dispatchEvents = (e) => {
     const events = {
+      // Handle clicks:
       click: function () {
         if (e.target.classList.contains("control__add")) {
           handleAddBtn(e);
         }
+
         // LOGIN VIEW
         if (model.state.view === "login") {
           if (e.target.classList.contains("login__submit")) {
@@ -194,18 +196,7 @@ const controller = (function () {
             handleUseWithExistingLocalData();
           }
         }
-        // LIST VIEW
-        if (model.state.view === "list") {
-          if (e.target.classList.contains("list-item__actions__status")) {
-            changeItemStatus(e.target);
-          }
-          if (e.target.classList.contains("input__submit")) {
-            handleItemSubmit();
-          }
-          if (e.target.classList.contains("control__back-to-overview")) {
-            showOverview();
-          }
-        }
+
         // LIST OVERVIEW
         if (model.state.view === "overview") {
           if (e.target.classList.contains("input__submit")) {
@@ -216,6 +207,19 @@ const controller = (function () {
           }
           if (e.target.classList.contains("list")) {
             showList(e.target);
+          }
+        }
+
+        // LIST VIEW
+        if (model.state.view === "list") {
+          if (e.target.classList.contains("list-item__actions__status")) {
+            changeItemStatus(e.target);
+          }
+          if (e.target.classList.contains("input__submit")) {
+            handleItemSubmit();
+          }
+          if (e.target.classList.contains("control__back-to-overview")) {
+            showOverview();
           }
         }
       },
