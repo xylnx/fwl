@@ -4,6 +4,7 @@ TD.md
 td.md
 dump.rdb
 config.js
+notes
 
 # Ignore vim swap files
 [._]*.s[a-v][a-z]
