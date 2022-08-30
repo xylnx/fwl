@@ -102,7 +102,12 @@ const controller = (function () {
     const pw = view.getElement(DOMStrings.loginPw).value;
     if (!user || !pw) return;
 
-    model.state.update({ view: "overview", user: user, password: pw });
+    model.state.update({
+      view: "overview",
+      useAPI: true,
+      user: user,
+      password: pw,
+    });
 
     const loginResponse = await auth.login();
     if (!loginResponse) {
