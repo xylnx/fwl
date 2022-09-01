@@ -19,7 +19,7 @@ const view = (function () {
   /**
    * Toggles the visibility of the input form
    * @memberof module:view
-   * @returns
+   * @returns { boolean } - true if input is open, false when collapsed.
    */
   const toggleInput = (DS) => {
     const headerLower = view.getElement(DS.headerLower);

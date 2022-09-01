@@ -39,15 +39,15 @@ const controller = (function () {
    * @memberof module:controller
    */
   const DOMStrings = {
-    header: 'header',
-    headerLower: '.header__lower',
-    btnAdd: '.control__add',
-    btnAddSvg: '.control__add svg',
-    main: 'main',
-    input: '.header__lower input',
-    items: 'main',
-    loginUser: '.login__input--user',
-    loginPw: '.login__input--pw',
+    header: "header",
+    headerLower: ".header__lower",
+    btnAdd: ".control__add",
+    btnAddSvg: ".control__add svg",
+    main: "main",
+    input: ".header__lower input",
+    items: "main",
+    loginUser: ".login__input--user",
+    loginPw: ".login__input--pw",
   };
 
   /**
@@ -77,6 +77,7 @@ const controller = (function () {
    * @memberof module:controller
    */
   const handleSubmit = () => {
+    // Query the input element
     const input = view.getElement(DOMStrings.input);
 
     // Stop here, if the the form is empty
@@ -87,7 +88,7 @@ const controller = (function () {
     view.clearInputField(DOMStrings.input);
 
     // Render listsj
-    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   };
 
   /**
@@ -101,8 +102,10 @@ const controller = (function () {
    * @memberof module:controller
    */
   const handleItemSubmit = () => {
-    const list = model.getList(model.state.listID);
+    const list = model.getList(model.state.listID); // ID of the current list
     const input = view.getElement(DOMStrings.input);
+
+    // Do not do anything, if the form was empty
     if (!input.value) return;
 
     // Update model
@@ -110,7 +113,7 @@ const controller = (function () {
     view.clearInputField(DOMStrings.input);
 
     // Render items
-    view.renderList({ list: list, DOMString: DOMStrings.items });
+    view.renderList({ list: list, DOMStrings: DOMStrings });
 
     // Open input again
     view.toggleInput(DOMStrings);
@@ -124,32 +127,75 @@ const controller = (function () {
    * @see {module:auth.login} -- authenticates the user
    * @see {module:controller.loadLists} -- loads list data from an API
    * @see {module:view.renderLists} -- (re)renders the lists view
+   * @memberof module:controller
    */
   const handleLoginSubmit = async () => {
     const user = view.getElement(DOMStrings.loginUser).value;
     const pw = view.getElement(DOMStrings.loginPw).value;
     if (!user || !pw) return;
 
-    model.state.update({ view: 'overview', user: user, password: pw });
+    model.state.update({
+      view: "overview",
+      useAPI: true,
+      user: user,
+      password: pw,
+    });
 
     const loginResponse = await auth.login();
     if (!loginResponse) {
-      model.state.update({ authToken: null, view: 'login' });
+      model.state.update({ authToken: null, view: "login" });
       loadLists();
     }
     model.state.update({ authToken: loginResponse.accessToken });
     await loadLists();
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.lists, DOMStrings: DOMStrings });
   };
 
+  /**
+   * Is called if a user clicks the `try out` option in the login view. In `try out mode` data is written to local storage.
+   * This function uses:
+   * @see {module:controller.confirmDelete} -- confirms deletion of data living in Local Storage (if it exists)
+   * @see {module:model.state.update} -- updates application state
+   * @see {module:view.renderLists} -- (re)renders the lists view
+   * @see {module:view.toggleInput} -- toggles visibility of the input form
+   * @memberof module:controller
+   */
   const handleTryOut = () => {
+    // `Try out` stores lists in the same location potential existing data is stored in.
+    // This deletes existing data,
+    // so check:
+    if (model.state.isLocalData) {
+      if (!confirmDelete("existing local Data")) return;
+    }
+
+    // Return and assign current state of the list array,
+    // on start up, it should be empty ([])
     const curLists = model.getLists();
-    model.state.update({ view: 'overview' });
+    model.state.update({ view: "overview" });
+
+    // Render lists; in try out there should be no lists visible, so:
+    // this mostly clears the login screen
     view.renderLists({
       lists: curLists,
-      DOMString: DOMStrings.main,
+      DOMStrings: DOMStrings,
     });
-    view.toggleInput(DOMStrings, document.querySelector('.controls__add'));
+
+    // Show input and get ready for creating the first list
+    const isOpen = view.toggleInput(
+      DOMStrings,
+      document.querySelector(".controls__add")
+    );
+
+    console.log({ isOpen });
+  };
+
+  const handleUseWithExistingLocalData = () => {
+    const curLists = model.getLists({ LS: true });
+    model.state.update({ view: "overview" });
+    view.renderLists({
+      lists: curLists,
+      DOMStrings: DOMStrings,
+    });
   };
 
   const handleListDelete = (target) => {
@@ -160,95 +206,102 @@ const controller = (function () {
     if (!confirmDelete(name)) return;
 
     model.removeList(ID);
-    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   };
 
   const showList = (target) => {
     const id = target.dataset.id;
     const list = model.getList(id);
-    view.renderList({ list: list, DOMString: DOMStrings.items });
-    model.state.update({ view: 'list', listID: id });
+    view.renderList({ list: list, DOMStrings: DOMStrings });
+    model.state.update({ view: "list", listID: id });
   };
 
   const showOverview = () => {
-    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
-    model.state.update({ view: 'overview', listID: null });
+    view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
+    model.state.update({ view: "overview", listID: null });
   };
 
   const changeItemStatus = (target) => {
     const itemID = target.parentNode.parentNode.dataset.id;
     model.state.update({ itemID: itemID });
-    if (target.classList.contains('list-item__actions__status--do')) {
+    if (target.classList.contains("list-item__actions__status--do")) {
       model.item.statusUpdate({ itemID: itemID, isDone: true });
     }
-    if (target.classList.contains('list-item__actions__status--done')) {
+    if (target.classList.contains("list-item__actions__status--done")) {
       model.item.statusUpdate({ itemID: itemID, isDone: false });
     }
     view.renderList({
       list: model.getList(model.state.listID),
-      DOMString: DOMStrings.items,
+      DOMStrings: DOMStrings,
     });
   };
 
   const dispatchEvents = (e) => {
     const events = {
+      // Handle clicks:
       click: function () {
-        if (e.target.classList.contains('control__add')) {
+        if (e.target.classList.contains("control__add")) {
           handleAddBtn(e);
         }
+
         // LOGIN VIEW
-        if (model.state.view === 'login') {
-          if (e.target.classList.contains('login__submit')) {
+        if (model.state.view === "login") {
+          if (e.target.classList.contains("login__submit")) {
             handleLoginSubmit();
           }
-          if (e.target.classList.contains('login__try-me')) {
+          if (e.target.classList.contains("login__try-me")) {
             handleTryOut();
           }
-        }
-        // LIST VIEW
-        if (model.state.view === 'list') {
-          if (e.target.classList.contains('list-item__actions__status')) {
-            changeItemStatus(e.target);
-          }
-          if (e.target.classList.contains('input__submit')) {
-            handleItemSubmit();
-          }
-          if (e.target.classList.contains('control__back-to-overview')) {
-            showOverview();
+          if (e.target.classList.contains("login__local-data")) {
+            handleUseWithExistingLocalData();
           }
         }
+
         // LIST OVERVIEW
-        if (model.state.view === 'overview') {
-          if (e.target.classList.contains('input__submit')) {
+        if (model.state.view === "overview") {
+          if (e.target.classList.contains("input__submit")) {
             handleSubmit();
           }
-          if (e.target.classList.contains('list__actions__delete')) {
+          if (e.target.classList.contains("list__actions__delete")) {
             handleListDelete(e.target);
           }
-          if (e.target.classList.contains('list')) {
+          if (e.target.classList.contains("list")) {
             showList(e.target);
+          }
+        }
+
+        // LIST VIEW
+        if (model.state.view === "list") {
+          if (e.target.classList.contains("list-item__actions__status")) {
+            changeItemStatus(e.target);
+          }
+          if (e.target.classList.contains("input__submit")) {
+            handleItemSubmit();
+          }
+          if (e.target.classList.contains("control__back-to-overview")) {
+            showOverview();
           }
         }
       },
       keydown: function () {
         const input = view.getElement(DOMStrings.input);
-        if (model.state.view === 'login' &amp;&amp; e.key === 'Enter') {
+        if (model.state.view === "login" &amp;&amp; e.key === "Enter") {
           handleLoginSubmit();
         }
         if (
-          model.state.view === 'list' &amp;&amp; //
+          model.state.view === "list" &amp;&amp; //
           document.activeElement === input
         ) {
-          if (e.key === 'Enter') {
+          if (e.key === "Enter") {
             e.preventDefault();
             handleItemSubmit();
           }
         }
         if (
-          model.state.view === 'overview' &amp;&amp;
+          model.state.view === "overview" &amp;&amp;
           document.activeElement === input
         ) {
-          if (e.key === 'Enter') {
+          if (e.key === "Enter") {
             e.preventDefault();
             handleSubmit();
           }
@@ -259,7 +312,7 @@ const controller = (function () {
   };
 
   const listenToEvents = () => {
-    const eventTypes = ['click', 'keydown'];
+    const eventTypes = ["click", "keydown"];
     eventTypes.map((eventType) =>
       document.body.addEventListener(eventType, dispatchEvents)
     );
@@ -269,51 +322,67 @@ const controller = (function () {
     try {
       await model.getLists({ API: true });
     } catch (error) {
-      console.log('###', error.message);
-      if (error.message === 'forbidden' || error.message === 'unauthorized') {
-        console.log(1);
-
+      if (error.message === "forbidden" || error.message === "unauthorized") {
         try {
           await auth.refresh();
         } catch (error) {
+          /*
           console.log('from init => try refresh:', error.message);
           if (error.message === 'refresh failed') {
-            // Show login form
-            model.state.update({ view: 'login' });
-            view.renderLogin({ DOMString: DOMStrings.main });
-          }
+          */
+          // Show login form
+          model.state.update({ view: "login" });
+          view.renderLogin({ DOMStrings: DOMStrings });
+          // }
         }
 
         await model.getLists({ API: true });
-        view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+        view.renderLists({ lists: model.lists, DOMStrings: DOMStrings });
         return;
       }
-      if (error.message === 'no content') {
-        console.log(555);
+      if (error.message === "no content") {
       } else {
         console.log(error.message);
         return;
       }
+    } finally {
+      return null;
     }
+  };
+
+  const checkForLocalData = () => {
+    if (!model.getListsFromLS()) {
+      model.state.update({ view: "login" });
+    } else {
+      model.state.update({ view: "login", isLocalData: true });
+      // calling model.getListsFromLS (see above) writes data into model.list
+      // so we need to reset the lists in case the 'Try out' option will be choosen
+      model.lists = [];
+    }
+    view.renderLogin({
+      DOMStrings: DOMStrings,
+      isLocalData: model.state.isLocalData, // if true an optional btn is displayed `use with local data`
+    });
   };
 
   const init = async () => {
     listenToEvents();
     const header = view.getElement(DOMStrings.header);
     const html = view.generateHtml(templates.header, {
-      headingMain: 'hello world',
+      headingMain: "hello world",
     });
-    header.insertAdjacentHTML('beforeend', html);
+    header.insertAdjacentHTML("beforeend", html);
 
     // Show login view
     // model.state.update({ view: 'login' });
-    // view.renderLogin({ DOMString: DOMStrings.main });
+    // view.renderLogin({ DOMStrings: DOMStrings });
 
     // testing();
+    checkForLocalData();
 
-    loadLists();
+    // loadLists();
 
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    // view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
 })();
@@ -333,7 +402,7 @@ const controller = (function () {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Tue Aug 30 2022 07:13:50 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Sep 01 2022 14:46:46 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
