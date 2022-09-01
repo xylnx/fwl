@@ -46,12 +46,15 @@ const view = (function () {
     return html;
   };
 
-  const insertHeading = (heading = "test", DOMString = ".header") => {
-    const header = getElement(DOMString);
+  const insertHeading = (
+    heading = "test",
+    DOMString = ".header__heading-main"
+  ) => {
+    const headerHeading = getElement(DOMString);
     clearView(DOMString);
-    const html = generateHtml(templates.header, {
-      headingMain: heading,
-    });
+    const html = `<span>${heading}</span>`;
+    headerHeading.insertAdjacentHTML("beforeend", html);
+  };
 
     header.insertAdjacentHTML("beforeend", html);
   };
