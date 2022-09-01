@@ -49,6 +49,7 @@ const controller = (function () {
    * @memberof module:controller
    */
   const handleSubmit = () => {
+    // Query the input element
     const input = view.getElement(DOMStrings.input);
 
     // Stop here, if the the form is empty
@@ -73,8 +74,10 @@ const controller = (function () {
    * @memberof module:controller
    */
   const handleItemSubmit = () => {
-    const list = model.getList(model.state.listID);
+    const list = model.getList(model.state.listID); // ID of the current list
     const input = view.getElement(DOMStrings.input);
+
+    // Do not do anything, if the form was empty
     if (!input.value) return;
 
     // Update model
@@ -96,6 +99,7 @@ const controller = (function () {
    * @see {module:auth.login} -- authenticates the user
    * @see {module:controller.loadLists} -- loads list data from an API
    * @see {module:view.renderLists} -- (re)renders the lists view
+   * @memberof module:controller
    */
   const handleLoginSubmit = async () => {
     const user = view.getElement(DOMStrings.loginUser).value;
@@ -119,19 +123,42 @@ const controller = (function () {
     view.renderLists({ lists: model.lists, DOMStrings: DOMStrings });
   };
 
+  /**
+   * Is called if a user clicks the `try out` option in the login view. In `try out mode` data is written to local storage.
+   * This function uses:
+   * @see {module:controller.confirmDelete} -- confirms deletion of data living in Local Storage (if it exists)
+   * @see {module:model.state.update} -- updates application state
+   * @see {module:view.renderLists} -- (re)renders the lists view
+   * @see {module:view.toggleInput} -- toggles visibility of the input form
+   * @memberof module:controller
+   */
   const handleTryOut = () => {
-    // Try out will store lists in the same location potential existing data is stored in, so check:
+    // `Try out` stores lists in the same location potential existing data is stored in.
+    // This deletes existing data,
+    // so check:
     if (model.state.isLocalData) {
       if (!confirmDelete("existing local Data")) return;
     }
 
+    // Return and assign current state of the list array,
+    // on start up, it should be empty ([])
     const curLists = model.getLists();
     model.state.update({ view: "overview" });
+
+    // Render lists; in try out there should be no lists visible, so:
+    // this mostly clears the login screen
     view.renderLists({
       lists: curLists,
       DOMStrings: DOMStrings,
     });
-    view.toggleInput(DOMStrings, document.querySelector(".controls__add"));
+
+    // Show input and get ready for creating the first list
+    const isOpen = view.toggleInput(
+      DOMStrings,
+      document.querySelector(".controls__add")
+    );
+
+    console.log({ isOpen });
   };
 
   const handleUseWithExistingLocalData = () => {
