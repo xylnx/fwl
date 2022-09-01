@@ -61,12 +61,12 @@ const view = (function () {
    * @param {Object} data -
    */
   const renderLists = (data) => {
-    const { lists, clearHtml, DOMString } = data;
+    const { lists, clearHtml, DOMStrings } = data;
 
     const parent = document.createElement("div");
     parent.classList.add("grid-container");
 
-    clearView(DOMString);
+    clearView(DOMStrings.main);
 
     // Hide `go back to overview` btn
     getElement(".control__back-to-overview").classList.add("hidden");
@@ -83,17 +83,18 @@ const view = (function () {
       parent.insertAdjacentHTML("beforeend", html);
     });
 
-    getElement(DOMString).appendChild(parent);
+    insertPlaceholder(DOMStrings.input, "Insert a list name");
+    getElement(DOMStrings.main).appendChild(parent);
   };
 
   const renderList = (data) => {
-    const { list, DOMString } = data;
+    const { list, DOMStrings } = data;
 
     // Create a container for list items
     const parent = document.createElement("div");
     parent.classList.add("grid-container");
 
-    clearView(DOMString);
+    clearView(DOMStrings.main);
 
     // Show list name in Header
     insertHeading(list.listName);
@@ -103,6 +104,7 @@ const view = (function () {
 
     // Check if there are any items in the list
     if (list.listItems === null) {
+      toggleInput(DOMStrings);
       console.log("there are no list items");
       return;
     }
@@ -115,15 +117,15 @@ const view = (function () {
       });
       parent.insertAdjacentHTML("beforeend", html);
     });
-    getElement(DOMString).appendChild(parent);
+    getElement(DOMStrings.main).appendChild(parent);
   };
 
-  const renderLogin = ({ DOMString, isLocalData = false }) => {
+  const renderLogin = ({ DOMStrings, isLocalData = false }) => {
     const hidden = isLocalData ? "" : "hidden";
-    clearView(DOMString);
+    clearView(DOMStrings.main);
     insertHeading("LOGIN");
     const html = generateHtml(templates.login, { hidden: hidden });
-    getElement(DOMString).insertAdjacentHTML("beforeend", html);
+    getElement(DOMStrings.main).insertAdjacentHTML("beforeend", html);
   };
 
   return {

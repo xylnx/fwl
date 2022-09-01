@@ -59,7 +59,7 @@ const controller = (function () {
     view.clearInputField(DOMStrings.input);
 
     // Render listsj
-    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   };
 
   /**
@@ -82,7 +82,7 @@ const controller = (function () {
     view.clearInputField(DOMStrings.input);
 
     // Render items
-    view.renderList({ list: list, DOMString: DOMStrings.items });
+    view.renderList({ list: list, DOMStrings: DOMStrings });
 
     // Open input again
     view.toggleInput(DOMStrings);
@@ -116,7 +116,7 @@ const controller = (function () {
     }
     model.state.update({ authToken: loginResponse.accessToken });
     await loadLists();
-    view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.lists, DOMStrings: DOMStrings });
   };
 
   const handleTryOut = () => {
@@ -129,7 +129,7 @@ const controller = (function () {
     model.state.update({ view: "overview" });
     view.renderLists({
       lists: curLists,
-      DOMString: DOMStrings.main,
+      DOMStrings: DOMStrings,
     });
     view.toggleInput(DOMStrings, document.querySelector(".controls__add"));
   };
@@ -139,7 +139,7 @@ const controller = (function () {
     model.state.update({ view: "overview" });
     view.renderLists({
       lists: curLists,
-      DOMString: DOMStrings.main,
+      DOMStrings: DOMStrings,
     });
   };
 
@@ -151,18 +151,18 @@ const controller = (function () {
     if (!confirmDelete(name)) return;
 
     model.removeList(ID);
-    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   };
 
   const showList = (target) => {
     const id = target.dataset.id;
     const list = model.getList(id);
-    view.renderList({ list: list, DOMString: DOMStrings.items });
+    view.renderList({ list: list, DOMStrings: DOMStrings });
     model.state.update({ view: "list", listID: id });
   };
 
   const showOverview = () => {
-    view.renderLists({ lists: model.getLists(), DOMString: DOMStrings.items });
+    view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
     model.state.update({ view: "overview", listID: null });
   };
 
@@ -177,7 +177,7 @@ const controller = (function () {
     }
     view.renderList({
       list: model.getList(model.state.listID),
-      DOMString: DOMStrings.items,
+      DOMStrings: DOMStrings,
     });
   };
 
@@ -277,12 +277,12 @@ const controller = (function () {
           */
           // Show login form
           model.state.update({ view: "login" });
-          view.renderLogin({ DOMString: DOMStrings.main });
+          view.renderLogin({ DOMStrings: DOMStrings });
           // }
         }
 
         await model.getLists({ API: true });
-        view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
+        view.renderLists({ lists: model.lists, DOMStrings: DOMStrings });
         return;
       }
       if (error.message === "no content") {
@@ -305,7 +305,7 @@ const controller = (function () {
       model.lists = [];
     }
     view.renderLogin({
-      DOMString: DOMStrings.main,
+      DOMStrings: DOMStrings,
       isLocalData: model.state.isLocalData, // if true an optional btn is displayed `use with local data`
     });
   };
@@ -320,7 +320,7 @@ const controller = (function () {
 
     // Show login view
     // model.state.update({ view: 'login' });
-    // view.renderLogin({ DOMString: DOMStrings.main });
+    // view.renderLogin({ DOMStrings: DOMStrings });
 
     // testing();
     checkForLocalData();
