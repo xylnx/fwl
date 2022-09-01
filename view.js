@@ -59,7 +59,12 @@ const view = (function () {
     headerHeading.insertAdjacentHTML("beforeend", html);
   };
 
-    header.insertAdjacentHTML("beforeend", html);
+  const insertPlaceholder = (
+    DOMString = ".input__input",
+    placeholder = "Add item"
+  ) => {
+    const input = view.getElement(DOMString);
+    input.placeholder = placeholder;
   };
 
   /**
@@ -104,6 +109,8 @@ const view = (function () {
 
     // Show list name in Header
     insertHeading(list.listName);
+    // Insert a placeholder into the form
+    insertPlaceholder(DOMStrings.input, "Insert new item");
 
     // Go back to overview btn
     getElement(".control__back-to-overview").classList.remove("hidden");
