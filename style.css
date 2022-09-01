@@ -27,6 +27,7 @@ html {
   --border-radius: 2px;
 }
 
+/* *************** */
 /* push footer to the bottom of the page */
 body {
   display: flex;
@@ -37,6 +38,7 @@ body {
 main {
   flex: 1;
 }
+/* *************** */
 
 body {
   background-color: var(--clr-bg);
@@ -56,8 +58,13 @@ a {
 }
 
 .main {
+  --header-height: 125px;
   margin: 0 auto;
-  margin-top: 1.6rem;
+  margin-top: calc(var(--header-height) + 2.4rem);
+}
+
+.form-open .main {
+  --header-height: 194px;
 }
 
 .main .btn {
@@ -141,6 +148,8 @@ svg {
 
 /* header */
 .header {
+  position: fixed;
+  width: 100%;
   /* border-radius: 0 var(--border-radius, 9px); */
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
