@@ -19,16 +19,19 @@ const view = (function () {
   /**
    * Toggles the visibility of the input form
    * @memberof module:view
+   * @returns
    */
   const toggleInput = (DS) => {
     const headerLower = view.getElement(DS.headerLower);
     headerLower.classList.toggle("hidden");
+    document.body.classList.toggle("form-open");
     getElement(DS.btnAddSvg).classList.toggle("rotate");
     if (!headerLower.classList.contains("hidden")) {
       view.getElement(DS.input).focus();
-      return;
+      return true;
     }
     getElement(DS.btnAdd).focus();
+    return false;
   };
 
   /**
