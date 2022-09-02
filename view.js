@@ -16,6 +16,10 @@ const view = (function () {
     getElement(DOMString).value = "";
   };
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   /**
    * Toggles the visibility of the input form
    * @memberof module:view
@@ -78,6 +82,7 @@ const view = (function () {
     parent.classList.add("grid-container");
 
     clearView(DOMStrings.main);
+    scrollToTop();
 
     // Hide `go back to overview` btn
     getElement(".control__back-to-overview").classList.add("hidden");
@@ -106,6 +111,7 @@ const view = (function () {
     parent.classList.add("grid-container");
 
     clearView(DOMStrings.main);
+    scrollToTop();
 
     // Show list name in Header
     insertHeading(list.listName);
@@ -135,6 +141,7 @@ const view = (function () {
   const renderLogin = ({ DOMStrings, isLocalData = false }) => {
     const hidden = isLocalData ? "" : "hidden";
     clearView(DOMStrings.main);
+    scrollToTop();
     insertHeading("LOGIN");
     const html = generateHtml(templates.login, { hidden: hidden });
     getElement(DOMStrings.main).insertAdjacentHTML("beforeend", html);
