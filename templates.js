@@ -44,7 +44,7 @@ const templates = (function () {
   // TEMPLATE PARTS
   const header = `
     <div class="header__upper">
-      <div class="header__brand">🔳 FWL</div>
+      <div class="header__brand">FWL</div>
       <div class="controls">
         <button type="button" class="btn control__back-to-overview hidden">
           ${_svgLists}

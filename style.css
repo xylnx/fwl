@@ -97,6 +97,19 @@ svg {
   transition: 0.4s transform ease-out;
 }
 
+.header__brand::before {
+  content: "";
+  width: 36px;
+  height: 36px;
+  background-color: #000;
+  border: 6px solid #d8d8d8;
+  border-radius: 2px;
+  display: inline-block;
+  vertical-align: baseline;
+  margin-right: 8px;
+  margin-bottom: -4px;
+}
+
 .input__input,
 .login__input {
   flex: 1 1;
@@ -173,13 +186,13 @@ svg {
 }
 
 .header__brand {
-  color: var(--clr-text-400);
   font-size: var(--fs-800);
   font-weight: 200;
   letter-spacing: 4px;
 }
 
 .header__lower {
+  display: flex;
   background-color: var(--clr-secondary-400);
   width: 100%;
   padding: 1.6rem 0.8rem;
