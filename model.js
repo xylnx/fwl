@@ -46,6 +46,7 @@ const model = (function () {
   let listsLSKey = "fwlLists";
   let state = {
     view: "overview",
+    inputIsOpen: false,
     isLocalData: false,
     useAPI: false,
     listID: null,
@@ -56,6 +57,7 @@ const model = (function () {
     update(args) {
       const {
         view = this.view,
+        inputIsOpen = this.inputIsOpen,
         listID = this.listID,
         itemID = this.itemID,
         user = this.user,
@@ -65,6 +67,7 @@ const model = (function () {
         useAPI = this.useAPI,
       } = args;
       this.view = view;
+      this.inputIsOpen = inputIsOpen;
       this.listID = listID;
       this.itemID = itemID;
       this.user = user;

@@ -117,7 +117,6 @@ const view = (function () {
 
     // Check if there are any items in the list
     if (list.listItems === null) {
-      toggleInput(DOMStrings);
       console.log("there are no list items");
       return;
     }

@@ -33,11 +33,13 @@ const controller = (function () {
   };
 
   /**
-   * Triggers {@link module:view.toggleInput}, which toggles the visibility of the input form.
+   * Show/hide the input form.
+   * @see {module:model.state.update} -- updates application state
+   * @see {module:view.toggleInput} -- toggle classes to show/hide the input field
    * @memberof module:controller
    */
   const handleAddBtn = () => {
-    view.toggleInput(DOMStrings);
+    model.state.update({ inputIsOpen: view.toggleInput(DOMStrings) });
   };
 
   /**
@@ -59,7 +61,7 @@ const controller = (function () {
     model.addList({ name: input.value });
     view.clearInputField(DOMStrings.input);
 
-    // Render listsj
+    // Render lists
     view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   };
 
@@ -70,7 +72,6 @@ const controller = (function () {
    * @see {module:model.item.add} -- adds an item to a list
    * @see {module:view.clearInputField} -- clears the input form
    * @see {module:view.renderLists} -- (re)renders the lists view
-   * @see {module:view.toggleInput} -- toggles visibility of the input form
    * @memberof module:controller
    */
   const handleItemSubmit = () => {
@@ -86,9 +87,6 @@ const controller = (function () {
 
     // Render items
     view.renderList({ list: list, DOMStrings: DOMStrings });
-
-    // Open input again
-    view.toggleInput(DOMStrings);
   };
 
   /**
@@ -129,7 +127,7 @@ const controller = (function () {
    * @see {module:controller.confirmDelete} -- confirms deletion of data living in Local Storage (if it exists)
    * @see {module:model.state.update} -- updates application state
    * @see {module:view.renderLists} -- (re)renders the lists view
-   * @see {module:view.toggleInput} -- toggles visibility of the input form
+   * @see {module:view.toggleInput} -- toggles classes to show/hide input form element
    * @memberof module:controller
    */
   const handleTryOut = () => {
@@ -153,12 +151,7 @@ const controller = (function () {
     });
 
     // Show input and get ready for creating the first list
-    const isOpen = view.toggleInput(
-      DOMStrings,
-      document.querySelector(".controls__add")
-    );
-
-    console.log({ isOpen });
+    model.state.update({ inputIsOpen: view.toggleInput(DOMStrings) });
   };
 
   const handleUseWithExistingLocalData = () => {
