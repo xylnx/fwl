@@ -22,6 +22,23 @@ const controller = (function () {
     loginPw: ".login__input--pw",
   };
 
+  const appendCss = (path) => {
+    const sheet = document.createElement("link");
+    sheet.setAttribute("rel", "stylesheet");
+    sheet.setAttribute("type", "text/css");
+    sheet.setAttribute("data-styles", "true");
+    sheet.setAttribute("href", path);
+    document.querySelector("head").appendChild(sheet);
+  };
+
+  const removeCss = () => {
+    const sheet = document.querySelector("[data-styles=true]");
+    sheet.remove();
+  };
+
+  // appendCss("style.legacy.css");
+  // removeCss();
+
   /**
    * Triggers a dialog modal asking the user to confirm deleting an item.
    * @param {string} itemName - The name of a list or an item
