@@ -270,15 +270,17 @@ const controller = (function () {
         ) {
           handleMenu();
         }
-
-        if (e.target.classList.contains("control__add")) {
-          handleAddBtn(e);
-        }
         if (e.target.classList.contains("control__menu-toggle")) {
           handleMenu();
         }
         if (e.target.classList.contains("menu__item")) {
           handleMenuItem(e);
+        }
+        if (
+          e.target.classList.contains("control__add") &&
+          model.state.view !== "login"
+        ) {
+          handleAddBtn(e);
         }
 
         // LOGIN VIEW
