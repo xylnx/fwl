@@ -51,6 +51,7 @@ const model = (function () {
     view: "overview",
     inputIsOpen: false,
     isLocalData: false,
+    menuIsOpen: false,
     colorTheme: "dark",
     useAPI: false,
     listID: null,
@@ -63,6 +64,7 @@ const model = (function () {
         view = this.view,
         inputIsOpen = this.inputIsOpen,
         isLocalData = this.isLocalData,
+        menuIsOpen = this.menuIsOpen,
         useAPI = this.useAPI,
         colorTheme = this.colorTheme,
         listID = this.listID,
@@ -73,6 +75,7 @@ const model = (function () {
       } = args;
       this.view = view;
       this.inputIsOpen = inputIsOpen;
+      this.menuIsOpen = menuIsOpen;
       this.colorTheme = colorTheme;
       this.listID = listID;
       this.itemID = itemID;

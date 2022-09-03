@@ -240,6 +240,7 @@ const controller = (function () {
 
   const handleMenu = () => {
     document.querySelector(".menu").classList.toggle("hidden");
+    model.state.update({ menuIsOpen: !model.state.menuIsOpen });
   };
 
   const handleMenuItem = (e) => {
@@ -263,6 +264,10 @@ const controller = (function () {
     const events = {
       // Handle clicks:
       click: function () {
+        if (model.state.menuIsOpen) {
+          handleMenu();
+        }
+
         if (e.target.classList.contains("control__add")) {
           handleAddBtn(e);
         }

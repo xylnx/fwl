@@ -130,6 +130,7 @@ svg {
   justify-content: center;
   flex-wrap: wrap;
   gap: var(--gap);
+  flex: 1;
 }
 
 .input__submit {
@@ -361,7 +362,7 @@ svg {
 
 .menu__wrapper {
   --menu-wrapper-padding-top: 1.2em;
-  display: relative;
+  position: relative;
   padding: var(--menu-wrapper-padding-top) 1.2em 1.2em 2em;
 }
 .menu__wrapper::before {
