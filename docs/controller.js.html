@@ -50,6 +50,43 @@ const controller = (function () {
     loginPw: ".login__input--pw",
   };
 
+  const changeTheme = () => {
+    const themeDefault = "dark";
+    const theme = model.state.colorTheme;
+    const path = `style.${theme}.css`;
+
+    // Remove current active state
+    const menuItems = document.querySelectorAll("[data-theme-name]");
+    menuItems.forEach((item) => item.classList.remove("menu__item--active"));
+
+    // Apply new active state
+    const menuItemActive = document.querySelector(
+      `[data-theme-name="${theme}"]`
+    );
+    menuItemActive.classList.add("menu__item--active");
+    removeCss();
+
+    if (theme !== themeDefault) {
+      // create link element
+      const sheet = document.createElement("link");
+      sheet.setAttribute("rel", "stylesheet");
+      sheet.setAttribute("type", "text/css");
+      sheet.setAttribute("data-styles", "true");
+      sheet.setAttribute("href", path);
+      document.querySelector("head").appendChild(sheet);
+    }
+  };
+
+  const removeCss = () => {
+    const sheet = document.querySelector("[data-styles=true]");
+
+    if (!sheet) return;
+    sheet.remove();
+  };
+
+  // appendCss("style.legacy.css");
+  // removeCss();
+
   /**
    * Triggers a dialog modal asking the user to confirm deleting an item.
    * @param {string} itemName - The name of a list or an item
@@ -61,11 +98,13 @@ const controller = (function () {
   };
 
   /**
-   * Triggers {@link module:view.toggleInput}, which toggles the visibility of the input form.
+   * Show/hide the input form.
+   * @see {module:model.state.update} -- updates application state
+   * @see {module:view.toggleInput} -- toggle classes to show/hide the input field
    * @memberof module:controller
    */
   const handleAddBtn = () => {
-    view.toggleInput(DOMStrings);
+    model.state.update({ inputIsOpen: view.toggleInput(DOMStrings) });
   };
 
   /**
@@ -87,7 +126,7 @@ const controller = (function () {
     model.addList({ name: input.value });
     view.clearInputField(DOMStrings.input);
 
-    // Render listsj
+    // Render lists
     view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   };
 
@@ -98,7 +137,6 @@ const controller = (function () {
    * @see {module:model.item.add} -- adds an item to a list
    * @see {module:view.clearInputField} -- clears the input form
    * @see {module:view.renderLists} -- (re)renders the lists view
-   * @see {module:view.toggleInput} -- toggles visibility of the input form
    * @memberof module:controller
    */
   const handleItemSubmit = () => {
@@ -114,9 +152,6 @@ const controller = (function () {
 
     // Render items
     view.renderList({ list: list, DOMStrings: DOMStrings });
-
-    // Open input again
-    view.toggleInput(DOMStrings);
   };
 
   /**
@@ -157,7 +192,7 @@ const controller = (function () {
    * @see {module:controller.confirmDelete} -- confirms deletion of data living in Local Storage (if it exists)
    * @see {module:model.state.update} -- updates application state
    * @see {module:view.renderLists} -- (re)renders the lists view
-   * @see {module:view.toggleInput} -- toggles visibility of the input form
+   * @see {module:view.toggleInput} -- toggles classes to show/hide input form element
    * @memberof module:controller
    */
   const handleTryOut = () => {
@@ -181,12 +216,7 @@ const controller = (function () {
     });
 
     // Show input and get ready for creating the first list
-    const isOpen = view.toggleInput(
-      DOMStrings,
-      document.querySelector(".controls__add")
-    );
-
-    console.log({ isOpen });
+    model.state.update({ inputIsOpen: view.toggleInput(DOMStrings) });
   };
 
   const handleUseWithExistingLocalData = () => {
@@ -236,11 +266,48 @@ const controller = (function () {
     });
   };
 
+  const handleMenu = () => {
+    document.querySelector(".menu").classList.toggle("hidden");
+    model.state.update({ menuIsOpen: !model.state.menuIsOpen });
+  };
+
+  const handleMenuItem = (e) => {
+    const themeName = e.srcElement.dataset.themeName;
+
+    if (!themeName) return;
+
+    if (themeName === "dark") {
+      model.state.update({ colorTheme: "dark" });
+      model.writeColorThemeToLS();
+      changeTheme();
+    }
+    if (themeName === "legacy") {
+      model.state.update({ colorTheme: "legacy" });
+      model.writeColorThemeToLS();
+      changeTheme();
+    }
+  };
+
   const dispatchEvents = (e) => {
     const events = {
       // Handle clicks:
       click: function () {
-        if (e.target.classList.contains("control__add")) {
+        if (
+          model.state.menuIsOpen &amp;&amp;
+          !e.target.classList.contains("control__menu-toggle")
+        ) {
+          handleMenu();
+        }
+        if (e.target.classList.contains("control__menu-toggle")) {
+          handleMenu();
+        }
+        if (e.target.classList.contains("menu__item")) {
+          handleMenuItem(e);
+        }
+        if (
+          e.target.classList.contains("control__add") &amp;&amp;
+          model.state.view !== "login"
+        ) {
           handleAddBtn(e);
         }
 
@@ -365,6 +432,13 @@ const controller = (function () {
     });
   };
 
+  const checkForColorTheme = () => {
+    const colorTheme = model.getColorThemeFromLS();
+    console.log(colorTheme);
+    if (!colorTheme) return;
+    changeTheme();
+  };
+
   const init = async () => {
     listenToEvents();
     const header = view.getElement(DOMStrings.header);
@@ -378,6 +452,7 @@ const controller = (function () {
     // view.renderLogin({ DOMStrings: DOMStrings });
 
     // testing();
+    checkForColorTheme();
     checkForLocalData();
 
     // loadLists();
@@ -402,7 +477,7 @@ const controller = (function () {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Sep 01 2022 14:46:46 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sat Sep 03 2022 17:11:48 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

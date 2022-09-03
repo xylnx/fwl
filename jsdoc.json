@@ -7,7 +7,13 @@
   "plugins": ["plugins/markdown"],
   "templates": {
     "cleverLinks": true,
-    "monospaceLinks": true
+    "monospaceLinks": true,
+    "default": {
+    "staticFiles": {
+      "include": ["./screenshot-1.png", "./screenshot-2.png"]
+    }
+
+    }
   },
   "opts": {
     "recurse": true,
