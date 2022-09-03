@@ -87,6 +87,10 @@ const view = (function () {
     // Hide `go back to overview` btn
     getElement(".control__back-to-overview").classList.add("hidden");
 
+    getElement("body").classList.remove("view-login");
+    getElement("body").classList.remove("view-list-items");
+    getElement("body").classList.add("view-list-overview");
+
     if (!lists) return;
 
     insertHeading("Available Lists");
@@ -121,6 +125,9 @@ const view = (function () {
     // Go back to overview btn
     getElement(".control__back-to-overview").classList.remove("hidden");
 
+    getElement("body").classList.remove("view-list-overview");
+    getElement("body").classList.add("view-list-items");
+
     // Check if there are any items in the list
     if (list.listItems === null) {
       console.log("there are no list items");
@@ -145,6 +152,7 @@ const view = (function () {
     insertHeading("LOGIN");
     const html = generateHtml(templates.login, { hidden: hidden });
     getElement(DOMStrings.main).insertAdjacentHTML("beforeend", html);
+    getElement("body").classList.add("view-login");
   };
 
   return {
