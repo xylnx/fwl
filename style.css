@@ -216,6 +216,11 @@ svg {
   border: 0;
 }
 
+.view-login .control__add {
+  opacity: 0.2;
+  cursor: default;
+}
+
 .control__menu-toggle {
   position: relative;
 }
