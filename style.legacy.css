@@ -101,3 +101,8 @@ input::placeholder {
 .login .btn {
   color: #f1f2f4;
 }
+
+.footer {
+  border-top: 1px solid #f1f2f4;
+  color: var(--clr-accent);
+}
