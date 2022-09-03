@@ -22,13 +22,31 @@ const controller = (function () {
     loginPw: ".login__input--pw",
   };
 
-  const appendCss = (path) => {
-    const sheet = document.createElement("link");
-    sheet.setAttribute("rel", "stylesheet");
-    sheet.setAttribute("type", "text/css");
-    sheet.setAttribute("data-styles", "true");
-    sheet.setAttribute("href", path);
-    document.querySelector("head").appendChild(sheet);
+  const changeTheme = () => {
+    const themeDefault = "dark";
+    const theme = model.state.colorTheme;
+    const path = `style.${theme}.css`;
+
+    // Remove current active state
+    const menuItems = document.querySelectorAll("[data-theme-name]");
+    menuItems.forEach((item) => item.classList.remove("menu__item--active"));
+
+    // Apply new active state
+    const menuItemActive = document.querySelector(
+      `[data-theme-name="${theme}"]`
+    );
+    menuItemActive.classList.add("menu__item--active");
+    removeCss();
+
+    if (theme !== themeDefault) {
+      // create link element
+      const sheet = document.createElement("link");
+      sheet.setAttribute("rel", "stylesheet");
+      sheet.setAttribute("type", "text/css");
+      sheet.setAttribute("data-styles", "true");
+      sheet.setAttribute("href", path);
+      document.querySelector("head").appendChild(sheet);
+    }
   };
 
   const removeCss = () => {
@@ -228,14 +246,17 @@ const controller = (function () {
     const themeName = e.srcElement.dataset.themeName;
 
     if (!themeName) return;
+
     if (themeName === "dark") {
-      removeCss();
+      model.state.update({ colorTheme: "dark" });
+      model.writeColorThemeToLS();
+      changeTheme();
     }
     if (themeName === "legacy") {
-      appendCss("style.legacy.css");
+      model.state.update({ colorTheme: "legacy" });
+      model.writeColorThemeToLS();
+      changeTheme();
     }
-    const menuItems = document.querySelectorAll(".menu__item");
-    menuItems.forEach((item) => item.classList.toggle("menu__item--active"));
   };
 
   const dispatchEvents = (e) => {
