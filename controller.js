@@ -394,6 +394,13 @@ const controller = (function () {
     });
   };
 
+  const checkForColorTheme = () => {
+    const colorTheme = model.getColorThemeFromLS();
+    console.log(colorTheme);
+    if (!colorTheme) return;
+    changeTheme();
+  };
+
   const init = async () => {
     listenToEvents();
     const header = view.getElement(DOMStrings.header);
@@ -407,6 +414,7 @@ const controller = (function () {
     // view.renderLogin({ DOMStrings: DOMStrings });
 
     // testing();
+    checkForColorTheme();
     checkForLocalData();
 
     // loadLists();

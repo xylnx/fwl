@@ -42,12 +42,16 @@ const model = (function () {
 
   // DATA
   let lists = [];
-  // let lists = listsExample;
-  let listsLSKey = "fwlLists";
+
+  // Keys for local storage
+  const listsLSKey = "fwlLists";
+  const colorThemeKey = "fwlColorTheme";
+
   let state = {
     view: "overview",
     inputIsOpen: false,
     isLocalData: false,
+    colorTheme: "dark",
     useAPI: false,
     listID: null,
     itemID: null,
@@ -58,16 +62,18 @@ const model = (function () {
       const {
         view = this.view,
         inputIsOpen = this.inputIsOpen,
+        isLocalData = this.isLocalData,
+        useAPI = this.useAPI,
+        colorTheme = this.colorTheme,
         listID = this.listID,
         itemID = this.itemID,
         user = this.user,
         password = this.password,
         authToken = this.authToken,
-        isLocalData = this.isLocalData,
-        useAPI = this.useAPI,
       } = args;
       this.view = view;
       this.inputIsOpen = inputIsOpen;
+      this.colorTheme = colorTheme;
       this.listID = listID;
       this.itemID = itemID;
       this.user = user;
@@ -151,6 +157,18 @@ const model = (function () {
   };
   const saveListsToLS = () => {
     writeToLocalStorage({ [listsLSKey]: model.lists });
+  };
+
+  const writeColorThemeToLS = () => {
+    writeToLocalStorage({ [colorThemeKey]: model.state.colorTheme });
+  };
+
+  const getColorThemeFromLS = () => {
+    const restoredColorTheme = readFromLocalStorage(colorThemeKey);
+    console.log(restoredColorTheme);
+    if (!restoredColorTheme) return null;
+    model.state.update({ colorTheme: restoredColorTheme });
+    return restoredColorTheme;
   };
 
   /** Create a pseudo ID. It is very unlikely to end up with two identical ids using this function. */
@@ -253,6 +271,8 @@ const model = (function () {
     state,
     getListsFromAPI,
     getListsFromLS,
+    getColorThemeFromLS,
+    writeColorThemeToLS,
     sendListsToAPI,
     API,
   };
