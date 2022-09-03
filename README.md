@@ -6,8 +6,5 @@ It is build in vanilla JS. List data can be stored in local storage or in an [ex
 
 Try out the [demo](https://xylnx.github.io/fwl/).
 
-![screenshot](screenshot-1.png) ![screenshot](screenshot-2.png)
-
-<style>
-img[alt=screenshot] { max-width: 49% }
-</style>
+<img src="screenshot-1.png" alt="app screentshot" width="49%" />
+<img src="screenshot-2.png" alt="app screentshot" width="49%" />
