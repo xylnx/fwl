@@ -264,7 +264,10 @@ const controller = (function () {
     const events = {
       // Handle clicks:
       click: function () {
-        if (model.state.menuIsOpen) {
+        if (
+          model.state.menuIsOpen &&
+          !e.target.classList.contains("control__menu-toggle")
+        ) {
           handleMenu();
         }
 
