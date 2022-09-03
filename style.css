@@ -40,6 +40,10 @@ main {
 }
 /* *************** */
 
+.flow > * + * {
+  margin-top: 0.8rem;
+}
+
 body {
   background-color: var(--clr-bg);
   color: var(--clr-text-400);
@@ -167,7 +171,6 @@ svg {
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
   background-color: var(--clr-primary-400);
-  overflow: hidden;
 }
 
 .header__upper,
@@ -211,6 +214,11 @@ svg {
 .control__menu-toggle {
   border: 0;
 }
+
+.control__menu-toggle {
+  position: relative;
+}
+
 .control__back-to-overview {
   color: var(--clr-accent);
 }
@@ -334,4 +342,75 @@ svg {
 .rotate {
   transform: rotate(405deg);
   transition: 0.4s transform ease-out;
+}
+
+/* ========================================
+ * Menu
+ * ===================================== */
+
+.menu {
+  position: absolute;
+  background-color: var(--clr-primary-400);
+  min-width: 16rem;
+  right: 0;
+  top: calc(100% + 8px);
+  border-radius: var(--border-radius);
+  box-shadow: 5px 5px 15px -8px #000000;
+  border: 1px solid var(--clr-accent);
+}
+
+.menu__wrapper {
+  --menu-wrapper-padding-top: 1.2em;
+  display: relative;
+  padding: var(--menu-wrapper-padding-top) 1.2em 1.2em 2em;
+}
+.menu__wrapper::before {
+  content: "";
+  position: absolute;
+  transform: translateY(calc(-100% - var(--menu-wrapper-padding-top)));
+  right: 12px;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 12px solid var(--clr-accent);
+}
+
+.menu__heading {
+  font-size: 14px;
+  text-align: left;
+  color: var(--clr-accent);
+}
+
+.menu__list {
+  list-style: none;
+  text-align: left;
+}
+
+.menu__item {
+  transition: color 0.4s ease;
+}
+.menu__item:hover {
+  color: var(--clr-accent);
+  transition: color 0.4s ease;
+}
+
+.menu__item {
+  position: relative;
+}
+
+.menu__item span {
+  position: absolute;
+  left: -24px;
+  transform: translateY(-6px);
+  color: var(--clr-accent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.menu__item span svg {
+  width: 16px;
+}
+
+.menu__item--active span {
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }

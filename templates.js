@@ -41,6 +41,28 @@ const templates = (function () {
     </svg>
   `;
 
+  const _popupMenu = `
+    <div class="menu hidden">
+      <div class="menu__wrapper">
+        <div class="menu__content">
+          <div class="menu__themes flow">
+            <h2 class="menu__heading">Themes</h2>
+            <ul class="menu__list flow">
+              <li class="menu__item menu__item--active" data-theme-name="dark">
+                <span>${_svgCheck}</span>
+                Dark theme
+              </li>
+              <li class="menu__item" data-theme-name="legacy">
+                <span>${_svgCheck}</span>
+                Legacy theme
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
   // TEMPLATE PARTS
   const header = `
     <div class="header__upper">
@@ -51,6 +73,7 @@ const templates = (function () {
         </button>
         <button type="button" class="btn control__menu-toggle">
           ${_svgMenu}
+          ${_popupMenu}
         </button>
         <button type="button" class="btn control__add">
           ${_svgPlus}

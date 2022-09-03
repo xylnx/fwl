@@ -33,6 +33,8 @@ const controller = (function () {
 
   const removeCss = () => {
     const sheet = document.querySelector("[data-styles=true]");
+
+    if (!sheet) return;
     sheet.remove();
   };
 
@@ -218,12 +220,36 @@ const controller = (function () {
     });
   };
 
+  const handleMenu = () => {
+    document.querySelector(".menu").classList.toggle("hidden");
+  };
+
+  const handleMenuItem = (e) => {
+    const themeName = e.srcElement.dataset.themeName;
+
+    if (!themeName) return;
+    if (themeName === "dark") {
+      removeCss();
+    }
+    if (themeName === "legacy") {
+      appendCss("style.legacy.css");
+    }
+    const menuItems = document.querySelectorAll(".menu__item");
+    menuItems.forEach((item) => item.classList.toggle("menu__item--active"));
+  };
+
   const dispatchEvents = (e) => {
     const events = {
       // Handle clicks:
       click: function () {
         if (e.target.classList.contains("control__add")) {
           handleAddBtn(e);
+        }
+        if (e.target.classList.contains("control__menu-toggle")) {
+          handleMenu();
+        }
+        if (e.target.classList.contains("menu__item")) {
+          handleMenuItem(e);
         }
 
         // LOGIN VIEW
