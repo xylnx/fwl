@@ -82,6 +82,8 @@ const view = (function () {
     parent.classList.add("grid-container");
 
     clearView(DOMStrings.main);
+    insertPlaceholder(DOMStrings.input, "Insert a list name");
+    insertHeading("Available Lists");
     scrollToTop();
 
     // Hide `go back to overview` btn
@@ -93,8 +95,6 @@ const view = (function () {
 
     if (!lists) return;
 
-    insertHeading("Available Lists");
-
     lists.map((list) => {
       const html = generateHtml(templates.list, {
         listName: list.listName,
@@ -103,7 +103,6 @@ const view = (function () {
       parent.insertAdjacentHTML("beforeend", html);
     });
 
-    insertPlaceholder(DOMStrings.input, "Insert a list name");
     getElement(DOMStrings.main).appendChild(parent);
   };
 
