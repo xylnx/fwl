@@ -130,7 +130,7 @@ const templates = (function () {
   `;
 
   const login = `
-    <form class="login grid-container">
+    <form class="login grid-container flow">
       <p class="login__msg">Please sign in!</p>
       <label class="login__label">
         <span>User name</span>
@@ -143,12 +143,12 @@ const templates = (function () {
       <button type="button" class="btn login__submit">Log me in!</button>
 
     </form>
-    <div class="login login--alternatives grid-container">
+    <div class="login login--alternatives grid-container flow">
     
       <p class="login__msg login__msg--options">Or pick another option:</p>
       <div class="login__actions">
         <button type="button" class="btn login__local-data {%hidden%}">Use existing local data</button>
-        <button type="button" class="btn login__try-me"><span>Try</span> without logging in</button>
+        <button type="button" class="btn login__try-me"><span>Try</span>without logging in</button>
       </div>
     </div>
   `;
