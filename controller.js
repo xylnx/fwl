@@ -11,46 +11,46 @@ const controller = (function () {
    * @memberof module:controller
    */
   const DOMStrings = {
-    header: "header",
-    headerLower: ".header__lower",
-    btnAdd: ".control__add",
-    btnAddSvg: ".control__add svg",
-    main: "main",
-    input: ".header__lower input",
-    items: "main",
-    loginUser: ".login__input--user",
-    loginPw: ".login__input--pw",
+    header: 'header',
+    headerLower: '.header__lower',
+    btnAdd: '.control__add',
+    btnAddSvg: '.control__add svg',
+    main: 'main',
+    input: '.header__lower input',
+    items: 'main',
+    loginUser: '.login__input--user',
+    loginPw: '.login__input--pw',
   };
 
   const changeTheme = () => {
-    const themeDefault = "dark";
+    const themeDefault = 'dark';
     const theme = model.state.colorTheme;
     const path = `style.${theme}.css`;
 
     // Remove current active state
-    const menuItems = document.querySelectorAll("[data-theme-name]");
-    menuItems.forEach((item) => item.classList.remove("menu__item--active"));
+    const menuItems = document.querySelectorAll('[data-theme-name]');
+    menuItems.forEach((item) => item.classList.remove('menu__item--active'));
 
     // Apply new active state
     const menuItemActive = document.querySelector(
       `[data-theme-name="${theme}"]`
     );
-    menuItemActive.classList.add("menu__item--active");
+    menuItemActive.classList.add('menu__item--active');
     removeCss();
 
     if (theme !== themeDefault) {
       // create link element
-      const sheet = document.createElement("link");
-      sheet.setAttribute("rel", "stylesheet");
-      sheet.setAttribute("type", "text/css");
-      sheet.setAttribute("data-styles", "true");
-      sheet.setAttribute("href", path);
-      document.querySelector("head").appendChild(sheet);
+      const sheet = document.createElement('link');
+      sheet.setAttribute('rel', 'stylesheet');
+      sheet.setAttribute('type', 'text/css');
+      sheet.setAttribute('data-styles', 'true');
+      sheet.setAttribute('href', path);
+      document.querySelector('head').appendChild(sheet);
     }
   };
 
   const removeCss = () => {
-    const sheet = document.querySelector("[data-styles=true]");
+    const sheet = document.querySelector('[data-styles=true]');
 
     if (!sheet) return;
     sheet.remove();
@@ -142,7 +142,7 @@ const controller = (function () {
     if (!user || !pw) return;
 
     model.state.update({
-      view: "overview",
+      view: 'overview',
       useAPI: true,
       user: user,
       password: pw,
@@ -150,7 +150,7 @@ const controller = (function () {
 
     const loginResponse = await auth.login();
     if (!loginResponse) {
-      model.state.update({ authToken: null, view: "login" });
+      model.state.update({ authToken: null, view: 'login' });
       loadLists();
     }
     model.state.update({ authToken: loginResponse.accessToken });
@@ -172,13 +172,13 @@ const controller = (function () {
     // This deletes existing data,
     // so check:
     if (model.state.isLocalData) {
-      if (!confirmDelete("existing local Data")) return;
+      if (!confirmDelete('existing local Data')) return;
     }
 
     // Return and assign current state of the list array,
     // on start up, it should be empty ([])
     const curLists = model.getLists();
-    model.state.update({ view: "overview" });
+    model.state.update({ view: 'overview' });
 
     // Render lists; in try out there should be no lists visible, so:
     // this mostly clears the login screen
@@ -193,7 +193,7 @@ const controller = (function () {
 
   const handleUseWithExistingLocalData = () => {
     const curLists = model.getLists({ LS: true });
-    model.state.update({ view: "overview" });
+    model.state.update({ view: 'overview' });
     view.renderLists({
       lists: curLists,
       DOMStrings: DOMStrings,
@@ -215,31 +215,32 @@ const controller = (function () {
     const id = target.dataset.id;
     const list = model.getList(id);
     view.renderList({ list: list, DOMStrings: DOMStrings });
-    model.state.update({ view: "list", listID: id });
+    model.state.update({ view: 'list', listID: id });
   };
 
   const showOverview = () => {
     view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
-    model.state.update({ view: "overview", listID: null });
+    model.state.update({ view: 'overview', listID: null });
   };
 
   const changeItemStatus = (target) => {
     const itemID = target.parentNode.parentNode.dataset.id;
     model.state.update({ itemID: itemID });
-    if (target.classList.contains("list-item__actions__status--do")) {
+    if (target.classList.contains('list-item__actions__status--do')) {
       model.item.statusUpdate({ itemID: itemID, isDone: true });
     }
-    if (target.classList.contains("list-item__actions__status--done")) {
+    if (target.classList.contains('list-item__actions__status--done')) {
       model.item.statusUpdate({ itemID: itemID, isDone: false });
     }
     view.renderList({
       list: model.getList(model.state.listID),
       DOMStrings: DOMStrings,
+      scroll: false,
     });
   };
 
   const handleMenu = () => {
-    document.querySelector(".menu").classList.toggle("hidden");
+    document.querySelector('.menu').classList.toggle('hidden');
     model.state.update({ menuIsOpen: !model.state.menuIsOpen });
   };
 
@@ -248,13 +249,13 @@ const controller = (function () {
 
     if (!themeName) return;
 
-    if (themeName === "dark") {
-      model.state.update({ colorTheme: "dark" });
+    if (themeName === 'dark') {
+      model.state.update({ colorTheme: 'dark' });
       model.writeColorThemeToLS();
       changeTheme();
     }
-    if (themeName === "legacy") {
-      model.state.update({ colorTheme: "legacy" });
+    if (themeName === 'legacy') {
+      model.state.update({ colorTheme: 'legacy' });
       model.writeColorThemeToLS();
       changeTheme();
     }
@@ -266,81 +267,81 @@ const controller = (function () {
       click: function () {
         if (
           model.state.menuIsOpen &&
-          !e.target.classList.contains("control__menu-toggle")
+          !e.target.classList.contains('control__menu-toggle')
         ) {
           handleMenu();
         }
-        if (e.target.classList.contains("control__menu-toggle")) {
+        if (e.target.classList.contains('control__menu-toggle')) {
           handleMenu();
         }
-        if (e.target.classList.contains("menu__item")) {
+        if (e.target.classList.contains('menu__item')) {
           handleMenuItem(e);
         }
         if (
-          e.target.classList.contains("control__add") &&
-          model.state.view !== "login"
+          e.target.classList.contains('control__add') &&
+          model.state.view !== 'login'
         ) {
           handleAddBtn(e);
         }
 
         // LOGIN VIEW
-        if (model.state.view === "login") {
-          if (e.target.classList.contains("login__submit")) {
+        if (model.state.view === 'login') {
+          if (e.target.classList.contains('login__submit')) {
             handleLoginSubmit();
           }
-          if (e.target.classList.contains("login__try-me")) {
+          if (e.target.classList.contains('login__try-me')) {
             handleTryOut();
           }
-          if (e.target.classList.contains("login__local-data")) {
+          if (e.target.classList.contains('login__local-data')) {
             handleUseWithExistingLocalData();
           }
         }
 
         // LIST OVERVIEW
-        if (model.state.view === "overview") {
-          if (e.target.classList.contains("input__submit")) {
+        if (model.state.view === 'overview') {
+          if (e.target.classList.contains('input__submit')) {
             handleSubmit();
           }
-          if (e.target.classList.contains("list__actions__delete")) {
+          if (e.target.classList.contains('list__actions__delete')) {
             handleListDelete(e.target);
           }
-          if (e.target.classList.contains("list")) {
+          if (e.target.classList.contains('list')) {
             showList(e.target);
           }
         }
 
         // LIST VIEW
-        if (model.state.view === "list") {
-          if (e.target.classList.contains("list-item__actions__status")) {
+        if (model.state.view === 'list') {
+          if (e.target.classList.contains('list-item__actions__status')) {
             changeItemStatus(e.target);
           }
-          if (e.target.classList.contains("input__submit")) {
+          if (e.target.classList.contains('input__submit')) {
             handleItemSubmit();
           }
-          if (e.target.classList.contains("control__back-to-overview")) {
+          if (e.target.classList.contains('control__back-to-overview')) {
             showOverview();
           }
         }
       },
       keydown: function () {
         const input = view.getElement(DOMStrings.input);
-        if (model.state.view === "login" && e.key === "Enter") {
+        if (model.state.view === 'login' && e.key === 'Enter') {
           handleLoginSubmit();
         }
         if (
-          model.state.view === "list" && //
+          model.state.view === 'list' && //
           document.activeElement === input
         ) {
-          if (e.key === "Enter") {
+          if (e.key === 'Enter') {
             e.preventDefault();
             handleItemSubmit();
           }
         }
         if (
-          model.state.view === "overview" &&
+          model.state.view === 'overview' &&
           document.activeElement === input
         ) {
-          if (e.key === "Enter") {
+          if (e.key === 'Enter') {
             e.preventDefault();
             handleSubmit();
           }
@@ -351,7 +352,7 @@ const controller = (function () {
   };
 
   const listenToEvents = () => {
-    const eventTypes = ["click", "keydown"];
+    const eventTypes = ['click', 'keydown'];
     eventTypes.map((eventType) =>
       document.body.addEventListener(eventType, dispatchEvents)
     );
@@ -361,7 +362,7 @@ const controller = (function () {
     try {
       await model.getLists({ API: true });
     } catch (error) {
-      if (error.message === "forbidden" || error.message === "unauthorized") {
+      if (error.message === 'forbidden' || error.message === 'unauthorized') {
         try {
           await auth.refresh();
         } catch (error) {
@@ -370,7 +371,7 @@ const controller = (function () {
           if (error.message === 'refresh failed') {
           */
           // Show login form
-          model.state.update({ view: "login" });
+          model.state.update({ view: 'login' });
           view.renderLogin({ DOMStrings: DOMStrings });
           // }
         }
@@ -379,7 +380,7 @@ const controller = (function () {
         view.renderLists({ lists: model.lists, DOMStrings: DOMStrings });
         return;
       }
-      if (error.message === "no content") {
+      if (error.message === 'no content') {
       } else {
         console.log(error.message);
         return;
@@ -391,9 +392,9 @@ const controller = (function () {
 
   const checkForLocalData = () => {
     if (!model.getListsFromLS()) {
-      model.state.update({ view: "login" });
+      model.state.update({ view: 'login' });
     } else {
-      model.state.update({ view: "login", isLocalData: true });
+      model.state.update({ view: 'login', isLocalData: true });
       // calling model.getListsFromLS (see above) writes data into model.list
       // so we need to reset the lists in case the 'Try out' option will be choosen
       model.lists = [];
@@ -415,9 +416,9 @@ const controller = (function () {
     listenToEvents();
     const header = view.getElement(DOMStrings.header);
     const html = view.generateHtml(templates.header, {
-      headingMain: "hello world",
+      headingMain: 'hello world',
     });
-    header.insertAdjacentHTML("beforeend", html);
+    header.insertAdjacentHTML('beforeend', html);
 
     // Show login view
     // model.state.update({ view: 'login' });
