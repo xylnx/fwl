@@ -448,7 +448,6 @@ svg {
 
 .login .btn span {
   margin-right: 5px;
-  font-weight: bold;
   color: var(--clr-accent);
 }
 
