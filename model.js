@@ -239,6 +239,21 @@ const model = (function () {
     setLists();
   };
 
+  const updateDomPos = ({ id = null, newPos = null }) => {
+    if (!id || !newPos) return;
+
+    // List overview
+    if (state.view === 'overview') {
+      model.lists[getListIndex(id)].domPos = newPos;
+    }
+    // List items
+    if (state.view === 'list') {
+      const list = model.getList();
+      const item = list.listItems[getItemIndex({ itemID: id })];
+      list.listItems[getItemIndex({ itemID: id })].domPos = newPos;
+    }
+  };
+
   const item = {
     add(args) {
       const { name } = args;
@@ -278,5 +293,6 @@ const model = (function () {
     writeColorThemeToLS,
     sendListsToAPI,
     API,
+    updateDomPos,
   };
 })();
