@@ -467,17 +467,42 @@ const controller = (function () {
     });
     header.insertAdjacentHTML('beforeend', html);
 
+    // Set up the app
+    /*
+    checkForColorTheme();
+    checkForLocalData();
+    */
+
+    // TESTING AND DEV
     // Show login view
     // model.state.update({ view: 'login' });
     // view.renderLogin({ DOMStrings: DOMStrings });
-
-    // testing();
-    checkForColorTheme();
-    checkForLocalData();
-
-    // loadLists();
+    testing();
 
     // view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
   init();
+
+  function testing() {
+    const testLists = [
+      {
+        listID: '491576615309313',
+        listName: 'Test list 1',
+        listItems: [
+          { itemName: 'Test item 1', itemID: '405111563634750', isDone: false },
+          { itemName: 'Test item 2', itemID: '613242526685035', isDone: false },
+          { itemName: 'Test item 3', itemID: '619582700464144', isDone: false },
+          { itemName: 'Test item 4', itemID: '268696937085884', isDone: false },
+        ],
+      },
+      { listID: '672486483285118', listName: 'Test list 2', listItems: null },
+      { listID: '816776156846935', listName: 'Test list 3', listItems: null },
+    ];
+
+    model.lists = testLists;
+    view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
+  }
+  return {
+    testing,
+  };
 })();
