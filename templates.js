@@ -99,6 +99,7 @@ const templates = (function () {
       class="list" 
       data-id={%listID%}
       data-name={%listName%}
+      draggable="true"
       >
       <div class="list__name">{%listName%}</div>
       <div class="list__actions">
@@ -113,6 +114,7 @@ const templates = (function () {
       class="list-item" 
       data-id={%itemID%} 
       data-isdone="{%isDone%}"
+      draggable="true"
       >
 
       <div class="list-item__name">{%itemName%}</div>
