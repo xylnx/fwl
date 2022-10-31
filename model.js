@@ -221,6 +221,7 @@ const model = (function () {
   };
 
   const getList = (id) => {
+    if (!id) return model.lists.find((list) => list.listID === state.listID);
     const list = model.lists.find((list) => list.listID === id);
     return list;
   };
