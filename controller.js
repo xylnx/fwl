@@ -22,6 +22,10 @@ const controller = (function () {
     loginPw: '.login__input--pw',
   };
 
+  /** Changes color themes: updates states and appends/removes stylesheets
+   * @see {controller.removeCss} -- remove stylesheets
+   * @memberof module:controller
+   */
   const changeTheme = () => {
     const themeDefault = 'dark';
     const theme = model.state.colorTheme;
@@ -128,7 +132,6 @@ const controller = (function () {
 
   /**
    * Handles a form submit in the `login view`. Logs the user in and renders their lists, if successfull.
-   * It uses and triggers functions in {@link module:view} and {@link module:model}
    * @see {module:view.getElement} -- queries elements
    * @see {module:model.state.update} -- updates application state
    * @see {module:auth.login} -- authenticates the user
@@ -160,7 +163,6 @@ const controller = (function () {
 
   /**
    * Is called if a user clicks the `try out` option in the login view. In `try out mode` data is written to local storage.
-   * This function uses:
    * @see {module:controller.confirmDelete} -- confirms deletion of data living in Local Storage (if it exists)
    * @see {module:model.state.update} -- updates application state
    * @see {module:view.renderLists} -- (re)renders the lists view
@@ -191,6 +193,12 @@ const controller = (function () {
     model.state.update({ inputIsOpen: view.toggleInput(DOMStrings) });
   };
 
+  /**
+   * Is called if a user clicks the `use existing local data` option in the login view. This mode loads and writes list data to local storage.
+   * @see {module:model.state.update} -- updates application state
+   * @see {module:view.renderLists} -- renders the lists view
+   * @memberof module:controller
+   */
   const handleUseWithExistingLocalData = () => {
     const curLists = model.getLists({ LS: true });
     model.state.update({ view: 'overview' });
@@ -200,6 +208,11 @@ const controller = (function () {
     });
   };
 
+  /** Deletes a list.
+   * @see {module:controller.confirmDelete} -- confirm if a list should be deleted
+   * @see {module:view.renderLists} -- (re)render the list view
+   * @memberof module:controller
+   */
   const handleListDelete = (target) => {
     const dataSet = target.parentNode.parentNode.dataset;
     const ID = dataSet.id;
@@ -211,6 +224,12 @@ const controller = (function () {
     view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   };
 
+  /** Fetches, loads and renders a list and its items.
+   * @see {module:model.getList} -- fetch list data (list items, their status etc.)
+   * @see {module:view.renderList} -- render list items
+   * @see {module:model.state.update} -- update application state
+   * @memberof module:controller
+   */
   const showList = (target) => {
     const id = target.dataset.id;
     const list = model.getList(id);
@@ -218,11 +237,23 @@ const controller = (function () {
     model.state.update({ view: 'list', listID: id });
   };
 
+  /** Renders an overview of all lists
+   * @see {module:model.getLists} -- fetch data on lists
+   * @see {module:view.renderLists} -- render lists
+   * @see {module:model.state.update} -- update application state
+   * @memberof module:controller
+   */
   const showOverview = () => {
     view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
     model.state.update({ view: 'overview', listID: null });
   };
 
+  /** Changes item status in {@link module:model} and updates view
+   * @see {module:model.state.update} -- update application state
+   * @see {module:model.item.statusUpdate} -- update state of an item in the model
+   * @see {module:view.renderLists} -- rerender list items
+   * @memberof module:controller
+   */
   const changeItemStatus = (target) => {
     const itemID = target.parentNode.parentNode.dataset.id;
     model.state.update({ itemID: itemID });
@@ -239,11 +270,21 @@ const controller = (function () {
     });
   };
 
+  /** Opens the three dot menu + writes isOpen state to the model
+   * @see {module:model.state.update} -- write menu state to the model
+   * @memberof module:controller
+   */
   const handleMenu = () => {
     document.querySelector('.menu').classList.toggle('hidden');
     model.state.update({ menuIsOpen: !model.state.menuIsOpen });
   };
 
+  /** Handles clicks etc. on Menu items, e.g. calls functions to apply a different theme
+   * @see {module:model.state.update} -- update state on which theme is used
+   * @see {module:model.writeColorThemeToLS} -- save current color theme to local storage
+   * @see {module:controller.changeTheme} --
+   * @memberof module:controller
+   */
   const handleMenuItem = (e) => {
     const themeName = e.srcElement.dataset.themeName;
 
@@ -261,6 +302,9 @@ const controller = (function () {
     }
   };
 
+  /** Calls relevant functions after events occured.
+   * @memberof module:controller
+   */
   const dispatchEvents = (e) => {
     const events = {
       // Handle clicks:
@@ -351,6 +395,9 @@ const controller = (function () {
     return events[e.type]();
   };
 
+  /** Listen to events
+   * @member module:controller
+   */
   const listenToEvents = () => {
     const eventTypes = ['click', 'keydown'];
     eventTypes.map((eventType) =>
@@ -366,7 +413,7 @@ const controller = (function () {
         try {
           await auth.refresh();
         } catch (error) {
-          /*
+          /**
           console.log('from init => try refresh:', error.message);
           if (error.message === 'refresh failed') {
           */
