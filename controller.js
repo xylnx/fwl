@@ -468,16 +468,14 @@ const controller = (function () {
     header.insertAdjacentHTML('beforeend', html);
 
     // Set up the app
-    /*
     checkForColorTheme();
     checkForLocalData();
-    */
 
     // TESTING AND DEV
     // Show login view
     // model.state.update({ view: 'login' });
     // view.renderLogin({ DOMStrings: DOMStrings });
-    testing();
+    // testing();
 
     // view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
@@ -487,6 +485,7 @@ const controller = (function () {
     const testLists = [
       {
         listID: '491576615309313',
+        domPos: '0',
         listName: 'Test list 1',
         listItems: [
           { itemName: 'Test item 1', itemID: '405111563634750', isDone: false },
@@ -495,14 +494,22 @@ const controller = (function () {
           { itemName: 'Test item 4', itemID: '268696937085884', isDone: false },
         ],
       },
-      { listID: '672486483285118', listName: 'Test list 2', listItems: null },
-      { listID: '816776156846935', listName: 'Test list 3', listItems: null },
+      {
+        listID: '672486483285118',
+        domPos: '100',
+        listName: 'Test list 2',
+        listItems: null,
+      },
+
+      {
+        listID: '816776156846935',
+        domPos: '10',
+        listName: 'Test list 3',
+        listItems: null,
+      },
     ];
 
     model.lists = testLists;
     view.renderLists({ lists: model.getLists(), DOMStrings: DOMStrings });
   }
-  return {
-    testing,
-  };
 })();
