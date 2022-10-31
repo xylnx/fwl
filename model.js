@@ -252,6 +252,8 @@ const model = (function () {
       const item = list.listItems[getItemIndex({ itemID: id })];
       list.listItems[getItemIndex({ itemID: id })].domPos = newPos;
     }
+    // Persist lists (LS or API)
+    setLists();
   };
 
   const item = {
