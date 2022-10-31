@@ -22,8 +22,8 @@ const view = (function () {
 
   /**
    * Toggles the visibility of the input form
-   * @memberof module:view
    * @returns { boolean } - true if input is open, false when collapsed.
+   * @memberof module:view
    */
   const toggleInput = (DS) => {
     const headerLower = view.getElement(DS.headerLower);
@@ -42,6 +42,7 @@ const view = (function () {
    * Generates HTML from a template and dynamic data.
    * @param {string} template - Generic HTML stored as a template string.
    * @param {Object} data - Data to be inserted. The key is used to identify where to put the data.
+   * @memberof module:view
    */
   const generateHtml = (template, data) => {
     // Put data into the markup
@@ -72,6 +73,25 @@ const view = (function () {
   };
 
   /**
+   * Sort lists or list items according to their position in the DOM.
+   * @param {array} elArr -- an array of lists or list items
+   * @returns {array} an array of elements sorted in an ascending order.
+   * @memberof module:view
+   *
+   */
+  const sortDomPos = (elArr) => {
+    console.log(elArr);
+    sortedEls = elArr.sort((a, b) => {
+      // Asign default vals if domPos prop does not exist
+      if (!a.domPos) a.domPos = elArr.indexOf(a);
+      if (!b.domPos) b.domPos = elArr.indexOf(b);
+      return a.domPos - b.domPos;
+    });
+
+    return sortedEls;
+  };
+
+  /**
    * Adds the lists to the list view.
    * @param {Object} props -
    */
@@ -97,10 +117,14 @@ const view = (function () {
 
     if (!lists) return;
 
-    lists.map((list) => {
+    // Sort lists according to their desired (defined by the user) position in the DOM
+    const sortedLists = sortDomPos(lists);
+
+    sortedLists.map((list) => {
       const html = generateHtml(templates.list, {
         listName: list.listName,
         listID: list.listID,
+        domPos: list.domPos,
       });
       parent.insertAdjacentHTML('beforeend', html);
     });
@@ -137,12 +161,17 @@ const view = (function () {
       console.log('there are no list items');
       return;
     }
+
+    // Sort lists according to their desired (defined by the user) position in the DOM
+    const sortedListItems = sortDomPos(list.listItems);
+
     // Render existing items
-    list.listItems.map((item) => {
+    sortedListItems.map((item) => {
       const html = generateHtml(templates.listItem, {
         itemID: item.itemID,
         itemName: item.itemName,
         isDone: item.isDone,
+        domPos: item.domPos,
       });
       parent.insertAdjacentHTML('beforeend', html);
     });
