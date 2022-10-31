@@ -96,10 +96,15 @@ const templates = (function () {
 
   const list = `
     <div 
+      id={%listID%}
       class="list" 
       data-id={%listID%}
       data-name={%listName%}
+      data-dom-pos={%domPos%}
       draggable="true"
+      ondragstart="dd.drag(event)"
+      ondrop="dd.drop(event)" 
+      ondragover="dd.allowDrop(event)"
       >
       <div class="list__name">{%listName%}</div>
       <div class="list__actions">
@@ -111,10 +116,15 @@ const templates = (function () {
 
   const listItem = `
     <div 
+      id={%itemID%}
       class="list-item" 
       data-id={%itemID%} 
       data-isdone="{%isDone%}"
+      data-dom-pos={%domPos%}
       draggable="true"
+      ondragstart="dd.drag(event)"
+      ondrop="dd.drop(event)" 
+      ondragover="dd.allowDrop(event)"
       >
 
       <div class="list-item__name">{%itemName%}</div>
