@@ -29,6 +29,7 @@ const model = (function () {
       refreshUrl: "http://localhost:3001/api/v1/refresh",
       logoutUrl: "http://localhost:3001/api/v1/logout",
     };
+    console.log({ API });
   } else {
     API = {
       root: "https://simjson.herokuapp.com/api/v1",
