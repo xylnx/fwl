@@ -7,7 +7,7 @@
 const dragAndDrop = (function () {
   const debug = false;
 
-  document.addEventListener('dragstart', drag);
+  document.querySelector('main').addEventListener('dragstart', drag);
 
   /**
    * Removes classes from lists and list items, depending on which view is active.
