@@ -102,11 +102,6 @@ const templates = (function () {
       data-name={%listName%}
       data-dom-pos={%domPos%}
       draggable="true"
-      ondragstart="dragAndDrop.drag(event)"
-      ondragenter="dragAndDrop.updateDropPos(event)"
-      ondragleave="dragAndDrop.hideDropZone(event)"
-      ondragover="dragAndDrop.allowDrop(event)"
-      ondrop="dragAndDrop.drop(event)" 
       >
       <div class="list__name">{%listName%}</div>
       <div class="list__actions">
@@ -124,11 +119,6 @@ const templates = (function () {
       data-isdone="{%isDone%}"
       data-dom-pos={%domPos%}
       draggable="true"
-      ondragstart="dragAndDrop.drag(event)"
-      ondragenter="dragAndDrop.updateDropPos(event)"
-      ondragleave="dragAndDrop.hideDropZone(event)"
-      ondragover="dragAndDrop.allowDrop(event)"
-      ondrop="dragAndDrop.drop(event)" 
       >
 
       <div class="list-item__name">{%itemName%}</div>

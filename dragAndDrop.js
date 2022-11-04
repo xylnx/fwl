@@ -7,6 +7,8 @@
 const dragAndDrop = (function () {
   const debug = false;
 
+  document.addEventListener('dragstart', drag);
+
   /**
    * Removes classes from lists and list items, depending on which view is active.
    * @param {array} [classSelectors] -- an array containg on or more classes to be removed
@@ -39,7 +41,16 @@ const dragAndDrop = (function () {
   function drag(e) {
     e.dataTransfer.effectAllowed = 'move';
     removeClasses(['blink']);
-    document.addEventListener('dragend', () => removeClasses());
+
+    // Add event listeners
+    // They are destroyed when dragging ends
+    const ddContainer = document.querySelector('.grid-container');
+    ddContainer.addEventListener('dragenter', updateDropPos);
+    ddContainer.addEventListener('dragover', allowDrop);
+    ddContainer.addEventListener('dragleave', hideDropZone);
+    ddContainer.addEventListener('drop', drop);
+    ddContainer.addEventListener('dragend', () => removeClasses());
+
     e.dataTransfer.setData('text', e.target.id);
     e.target.classList.add('dragging');
 
