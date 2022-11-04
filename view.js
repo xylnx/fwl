@@ -80,7 +80,6 @@ const view = (function () {
    *
    */
   const sortDomPos = (elArr) => {
-    console.log(elArr);
     sortedEls = elArr.sort((a, b) => {
       // Asign default vals if domPos prop does not exist
       if (!a.domPos) a.domPos = elArr.indexOf(a);

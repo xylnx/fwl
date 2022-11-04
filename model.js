@@ -58,6 +58,8 @@ const model = (function () {
     user: null,
     password: null,
     authToken: null,
+    dropPos: '0',
+    dragPos: '0',
     update(args) {
       const {
         view = this.view,
@@ -71,6 +73,8 @@ const model = (function () {
         user = this.user,
         password = this.password,
         authToken = this.authToken,
+        dropPos = this.dropPos,
+        dragPos = this.dragPos,
       } = args;
       this.view = view;
       this.inputIsOpen = inputIsOpen;
@@ -83,6 +87,8 @@ const model = (function () {
       this.authToken = authToken;
       this.isLocalData = isLocalData;
       this.useAPI = useAPI;
+      this.dropPos = dropPos;
+      this.dragPos = dragPos;
       console.log('STATE:', this);
     },
   };

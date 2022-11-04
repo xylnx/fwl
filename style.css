@@ -86,6 +86,7 @@ main {
 
 /* Contain lists + list items */
 .grid-container {
+  position: relative;
   display: grid;
   grid-gap: var(--gap);
   max-width: 48rem;
@@ -477,4 +478,49 @@ svg {
 .rotate {
   transform: rotate(405deg);
   transition: transform 0.2 ease-out;
+}
+
+.bg-accent {
+  background-color: var(--clr-accent);
+}
+
+/* DRAG AND DROP */
+.dragging {
+  opacity: 0.4;
+}
+
+.show-drop-zone-top {
+  transition: 0.2s;
+  border-top: 8px solid var(--clr-accent);
+  padding-top: 16px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  box-shadow: inset 0px 8px var(--clr-bg);
+}
+
+.show-drop-zone-bottom {
+  transition: 0.2s;
+  padding-bottom: 16px;
+  border-bottom: 8px solid var(--clr-accent);
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  box-shadow: inset 0px -8px var(--clr-bg);
+}
+
+.blink {
+  animation: blink 0.4s forwards;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+    background-color: var(--clr-accent);
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    background-color: var(--clr-primary-400);
+  }
 }

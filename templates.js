@@ -103,6 +103,8 @@ const templates = (function () {
       data-dom-pos={%domPos%}
       draggable="true"
       ondragstart="dragAndDrop.drag(event)"
+      ondragenter="dragAndDrop.updateDropPos(event)"
+      ondragleave="dragAndDrop.hideDropZone(event)"
       ondragover="dragAndDrop.allowDrop(event)"
       ondrop="dragAndDrop.drop(event)" 
       >
@@ -123,6 +125,8 @@ const templates = (function () {
       data-dom-pos={%domPos%}
       draggable="true"
       ondragstart="dragAndDrop.drag(event)"
+      ondragenter="dragAndDrop.updateDropPos(event)"
+      ondragleave="dragAndDrop.hideDropZone(event)"
       ondragover="dragAndDrop.allowDrop(event)"
       ondrop="dragAndDrop.drop(event)" 
       >
