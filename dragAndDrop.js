@@ -22,7 +22,6 @@ const dragAndDrop = (function () {
     ]
   ) {
     const children = document.querySelector('.grid-container').children;
-    console.log({ classSelectors });
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       classSelectors.forEach((cls) => {
