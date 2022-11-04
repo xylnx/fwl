@@ -37,26 +37,21 @@ const dragAndDrop = (function () {
   function drop(e) {
     e.preventDefault();
 
-    // The index of the dragged element in the nodeList of all elements (will be set below)
+    // Starting position of a dragged element (dragee)
     let dragindex = 0;
+
+    // Postion of the element the dragee is exchanged with
     let dropindex = 0;
 
-    // Create a clone of the element onto which the dragged element was dropped
-    const clone = e.target.cloneNode(true);
     // Get ID of the dragged element => this ID was stored in drag() using `setData()`
     const data = e.dataTransfer.getData('text');
 
     // Dragged element
-    const curEl = document.getElementById(data); // delete this one
     const dropee = document.getElementById(data);
     // Drop zone element
     const dragee = e.target;
-    console.log('HELLO', dropee.dataset.domPos);
 
-    const cloneDomPos = e.target.dataset.domPos;
-    const curDomPos = curEl.dataset.domPos;
-
-    if (clone.id !== data) {
+    if (dragee.id !== data) {
       // Get all list/list item elements
       let children = document.querySelector('.grid-container').children;
 
@@ -66,7 +61,7 @@ const dragAndDrop = (function () {
           dragindex = i;
           console.log({ dragindex });
         }
-        if (children[i].id === clone.id) {
+        if (children[i].id === dragee.id) {
           dropindex = i;
           console.log({ dropindex });
         }
