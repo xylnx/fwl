@@ -468,16 +468,14 @@ const controller = (function () {
     header.insertAdjacentHTML('beforeend', html);
 
     // Set up the app
-    /*
     checkForColorTheme();
     checkForLocalData();
-    */
 
     // TESTING AND DEV
     // Show login view
     // model.state.update({ view: 'login' });
     // view.renderLogin({ DOMStrings: DOMStrings });
-    testing.showTestData({ DOMStrings });
+    // testing.showTestData({ DOMStrings });
 
     // view.renderLists({ lists: model.lists, DOMString: DOMStrings.items });
   };
