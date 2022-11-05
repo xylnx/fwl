@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Make it possible to drag and drop lists and list items. The functions in this model essentially allow to swap DOM elements.</p></div>
+            <div class="description"><p>Makes it possible to drag and drop lists and list items. The functions in this model essentially allow to swap DOM elements.</p></div>
         
 
         
@@ -218,9 +218,7 @@
 
             
 
-            <td class="description last"><ul>
-<li>event object</li>
-</ul></td>
+            <td class="description last"><p>event object</p></td>
         </tr>
 
     
@@ -261,7 +259,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line22">line 22</a>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -358,9 +356,7 @@ It sets the dataTransfer property to the id of the dragged element.</p>
 
             
 
-            <td class="description last"><ul>
-<li>event object</li>
-</ul></td>
+            <td class="description last"><p>event object</p></td>
         </tr>
 
     
@@ -401,7 +397,7 @@ It sets the dataTransfer property to the id of the dragged element.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line14">line 14</a>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -445,7 +441,7 @@ It sets the dataTransfer property to the id of the dragged element.</p>
 
 
 <div class="description">
-    <p>Runs when a user drops the dragged item onto a possible drop zone.</p>
+    <p>Updates positons of lists and list items in the DOM. They are persisted in <a href="module-model.html#.lists"><code>module:model.lists</code></a>. This function runs when a user drops a dragged item onto a possible drop zone.</p>
 </div>
 
 
@@ -497,9 +493,7 @@ It sets the dataTransfer property to the id of the dragged element.</p>
 
             
 
-            <td class="description last"><ul>
-<li>event object</li>
-</ul></td>
+            <td class="description last"><p>event object</p></td>
         </tr>
 
     
@@ -540,7 +534,704 @@ It sets the dataTransfer property to the id of the dragged element.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line30">line 30</a>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".handleDragEnter"><span class="type-signature">(static) </span>handleDragEnter<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Tracks the drop position by updating <code>module:model.state.dropPos</code>. Triggers <a href="module-dragAndDrop.html#.showDropZone"><code>module:dragAndDrop.showDropZone</code></a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>event object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".hideDropZone"><span class="type-signature">(static) </span>hideDropZone<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes classes and hides visual cues for showing if and where an element would be placed when dropped. Usually triggered ondragleave.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>event object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".removeClasses"><span class="type-signature">(static) </span>removeClasses<span class="signature">(classSelectors<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes classes from lists and list items, depending on which view is active.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>classSelectors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>an array containg one or more classes to be removed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".rerender"><span class="type-signature">(static) </span>rerender<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Rerenders lists and list items</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>event object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line209">line 209</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".showDropZone"><span class="type-signature">(static) </span>showDropZone<span class="signature">(e)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds and removes classes to show if and where an element will be placed when dropped</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>e</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>event object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dragAndDrop.js.html">dragAndDrop.js</a>, <a href="dragAndDrop.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -586,13 +1277,13 @@ It sets the dataTransfer property to the id of the dragged element.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controller.html">controller</a></li><li><a href="module-dragAndDrop.html">dragAndDrop</a></li><li><a href="module-view.html">view</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controller.html">controller</a></li><li><a href="module-dragAndDrop.html">dragAndDrop</a></li><li><a href="module-model.html">model</a></li><li><a href="module-view.html">view</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Mon Oct 31 2022 17:43:52 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sat Nov 05 2022 13:30:18 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

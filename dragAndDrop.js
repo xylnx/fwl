@@ -1,6 +1,6 @@
 /**
  * @module dragAndDrop
- * @description Make it possible to drag and drop lists and list items. The functions in this model essentially allow to swap DOM elements.
+ * @description Makes it possible to drag and drop lists and list items. The functions in this model essentially allow to swap DOM elements.
  * @author xylnx
  * @see <a href="https://github.com/xylnx">https://github.com/xylnx</a>
  */
@@ -11,7 +11,7 @@ const dragAndDrop = (function () {
 
   /**
    * Removes classes from lists and list items, depending on which view is active.
-   * @param {array} [classSelectors] -- an array containg on or more classes to be removed
+   * @param {array} [classSelectors] an array containg one or more classes to be removed
    * @memberof module:dragAndDrop
    */
   function removeClasses(
@@ -35,7 +35,7 @@ const dragAndDrop = (function () {
   /**
    * Runs when a user starts dragging an item (ondragstart).
    * It sets the dataTransfer property to the id of the dragged element.
-   * @param {Object} e -- event object
+   * @param {Object} e event object
    * @memberof module:dragAndDrop
    */
   function drag(e) {
@@ -45,7 +45,7 @@ const dragAndDrop = (function () {
     // Add event listeners
     // They are destroyed when dragging ends
     const ddContainer = document.querySelector('.grid-container');
-    ddContainer.addEventListener('dragenter', updateDropPos);
+    ddContainer.addEventListener('dragenter', handleDragEnter);
     ddContainer.addEventListener('dragover', allowDrop);
     ddContainer.addEventListener('dragleave', hideDropZone);
     ddContainer.addEventListener('drop', drop);
@@ -58,13 +58,17 @@ const dragAndDrop = (function () {
   }
 
   /** Runs when a user places a draggable item over a drop zone: per default browsers do not allow drag and drop => prevent the default.
-   * @param {Object} e -- event object
+   * @param {Object} e event object
    * @memberof module:dragAndDrop
    */
   function allowDrop(e) {
     e.preventDefault();
   }
 
+  /** Adds and removes classes to show if and where an element will be placed when dropped
+   * @param {Object} e event object
+   * @memberof module:dragAndDrop
+   */
   function showDropZone(e) {
     const draggedDP = Number(model.state.dragPos);
     let enteredDP = Number(e.target.dataset.domPos);
@@ -86,20 +90,29 @@ const dragAndDrop = (function () {
     }
   }
 
+  /** Removes classes and hides visual cues for showing if and where an element would be placed when dropped. Usually triggered ondragleave.
+   * @param {Object} e event object
+   * @memberof module:dragAndDrop
+   */
   function hideDropZone(e) {
     e.target.classList.remove('show-drop-zone-top');
     e.target.classList.remove('show-drop-zone-bottom');
   }
 
-  function updateDropPos(e) {
+  /** Tracks the drop position by updating {@link module:model.state.dropPos}. Triggers {@link module:dragAndDrop.showDropZone}.
+   * @param {Object} e event object
+   * @memberof module:dragAndDrop
+   */
+  function handleDragEnter(e) {
     e.preventDefault();
-    model.state.update({ dropPos: e.target.dataset.domPos });
     e.dataTransfer.dropEffect = 'move';
+    model.state.update({ dropPos: e.target.dataset.domPos });
     showDropZone(e);
   }
 
-  /** Runs when a user drops the dragged item onto a possible drop zone.
-   * @param {Object} e -- event object
+  /** Updates positons of lists and list items in the DOM. They are persisted in {@link module:model.lists}. This function runs when a user drops a dragged item onto a possible drop zone.
+   *
+   * @param {Object} e event object
    * @memberof module:dragAndDrop
    */
   function drop(e) {
@@ -189,6 +202,10 @@ const dragAndDrop = (function () {
     if (debug) console.log('Lists after:', model.lists);
   }
 
+  /** Rerenders lists and list items
+   * @param {Object} e event object
+   * @memberof module:dragAndDrop
+   */
   function rerender() {
     if (model.state.view === 'overview') {
       view.renderLists({
@@ -205,13 +222,4 @@ const dragAndDrop = (function () {
       });
     }
   }
-
-  return {
-    allowDrop,
-    drag,
-    drop,
-    updateDropPos,
-    showDropZone,
-    hideDropZone,
-  };
 })();
