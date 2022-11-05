@@ -29,7 +29,7 @@ const controller = (function () {
   const changeTheme = () => {
     const themeDefault = 'dark';
     const theme = model.state.colorTheme;
-    const path = `style.${theme}.css`;
+    const path = `style/style.${theme}.css`;
 
     // Remove current active state
     const menuItems = document.querySelectorAll('[data-theme-name]');
@@ -282,7 +282,7 @@ const controller = (function () {
   /** Handles clicks etc. on Menu items, e.g. calls functions to apply a different theme
    * @see {module:model.state.update} -- update state on which theme is used
    * @see {module:model.writeColorThemeToLS} -- save current color theme to local storage
-   * @see {module:controller.changeTheme} --
+   * @see {module:controller.changeTheme} -- switch the current theme
    * @memberof module:controller
    */
   const handleMenuItem = (e) => {

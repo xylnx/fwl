@@ -10,7 +10,7 @@
     "monospaceLinks": true,
     "default": {
     "staticFiles": {
-      "include": ["./screenshot-1.png", "./screenshot-2.png"]
+      "include": ["./screenshots/screenshot-1.png", "./screenshots/screenshot-2.png"]
     }
 
     }
