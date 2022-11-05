@@ -207,6 +207,10 @@ const dragAndDrop = (function () {
    * @memberof module:dragAndDrop
    */
   function rerender() {
+    // Get current scroll position
+    const scrollPos = window.scrollY;
+
+    // Rerender
     if (model.state.view === 'overview') {
       view.renderLists({
         lists: model.getLists(),
@@ -221,5 +225,8 @@ const dragAndDrop = (function () {
         DOMStrings: controller.DOMStrings,
       });
     }
+
+    // Scroll back to the last scroll position
+    window.scrollTo(0, scrollPos);
   }
 })();
