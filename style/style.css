@@ -50,6 +50,8 @@ html {
  * ===================================== */
 
 body {
+  width: 100vw;
+  overflow-x: hidden;
   background-color: var(--clr-bg);
   color: var(--clr-text-400);
   font-size: var(--fs-400);
@@ -206,6 +208,7 @@ svg {
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
   background-color: var(--clr-primary-400);
+  z-index: 1;
 }
 
 .header svg {

@@ -47,6 +47,7 @@
 .list-item {
   background-color: var(--clr-secondary-200);
   padding: 0 0 0 0.8rem;
+  border: 1px solid var(--clr-secondary-200);
   color: var(--clr-text-600);
 }
 
@@ -62,7 +63,7 @@
   height: 4rem;
   width: 6rem;
   background-color: var(--clr-secondary-400);
-  border-left: 1px dotted var(--clr-text-400);
+  border: 0;
   color: var(--clr-text-600);
 }
 
@@ -74,15 +75,14 @@
   align-items: center;
   justify-content: center;
   border: 0;
-  border-left: 1px dotted var(--clr-text-400);
 }
 
 [data-isdone='false'] svg {
-  color: var(--clr-text-400);
+  color: var(--clr-text-600);
 }
 
 [data-isdone='true'] svg {
-  color: var(--clr-accent);
+  color: var(--clr-text-600);
 }
 
 .login__input {
@@ -97,4 +97,18 @@
   border-top: var(--border);
   border-color: var(--clr-text-200);
   color: var(--clr-text);
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+    background-color: var(--clr-text-400);
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    background-color: var(--clr-secondary-200);
+  }
 }
