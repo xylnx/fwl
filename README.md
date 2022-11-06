@@ -9,7 +9,7 @@ Try out the [demo](https://xylnx.github.io/fwl/).
 Read the [documentation](https://xylnx.github.io/fwl/docs/).
 
 <div>
-  <img src="./screenshot-1.png" alt="app screenshot of the login view" width="49%" />
+  <img src="screenshots/screenshot-1.png" alt="app screenshot of the login view" width="49%" />
 
-  <img src="./screenshot-2.png" alt="app screenshot of a list view" width="49%" />
+  <img src="screenshots/screenshot-2.png" alt="app screenshot of a list view" width="49%" />
 </div>
