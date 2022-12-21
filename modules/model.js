@@ -26,10 +26,10 @@ const model = (function () {
     console.log({ API });
   } else {
     API = {
-      root: 'fwl.0b101010.site/api/v1',
-      authUrl: 'fwl.0b101010.site/api/v1/auth',
-      refreshUrl: 'fwl.0b101010.site/api/v1/refresh',
-      logoutUrl: 'fwl.0b101010.site/api/v1/logout',
+      root: 'https://fwl.0b101010.site/api/v1',
+      authUrl: 'https://fwl.0b101010.site/api/v1/auth',
+      refreshUrl: 'https://fwl.0b101010.site/api/v1/refresh',
+      logoutUrl: 'https://fwl.0b101010.site/api/v1/logout',
     };
   }
 
