@@ -26,10 +26,10 @@ const model = (function () {
     console.log({ API });
   } else {
     API = {
-      root: 'https://simjson.herokuapp.com/api/v1',
-      authUrl: 'https://simjson.herokuapp.com/api/v1/auth',
-      refreshUrl: 'https://simjson.herokuapp.com/api/v1/refresh',
-      logoutUrl: 'https://simjson.herokuapp.com/api/v1/logout',
+      root: 'fwl.0b101010.site/api/v1',
+      authUrl: 'fwl.0b101010.site/api/v1/auth',
+      refreshUrl: 'fwl.0b101010.site/api/v1/refresh',
+      logoutUrl: 'fwl.0b101010.site/api/v1/logout',
     };
   }
 
