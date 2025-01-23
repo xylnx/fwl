@@ -122,15 +122,15 @@ const templates = (function () {
       >
 
       <div class="list-item__name">{%itemName%}</div>
-      <div class="list-item__actions">
+      <div class="list-item__actions d-flex gap-2">
+        <button type="button" class="btn list-item__actions__delete">
+          ${_svgDelete}
+        </button>
         <button type="button" class="btn list-item__actions__status list-item__actions__status--do">
           ${_svgExclam}
         </button>
         <button type="button" class="btn list-item__actions__status list-item__actions__status--done">
           ${_svgCheck}
-        </button>
-        <button type="button" class="btn list-item__actions__delete hidden">
-          ${_svgDelete}
         </button>
     </div>
   `;

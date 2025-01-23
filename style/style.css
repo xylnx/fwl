@@ -514,6 +514,13 @@ svg {
   animation: blink 0.4s forwards;
 }
 
+.d-flex {
+  display: flex;
+}
+.gap-2 {
+  gap: 8px;
+}
+
 @keyframes blink {
   0% {
     opacity: 1;
