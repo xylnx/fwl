@@ -329,6 +329,15 @@ const model = (function () {
     setLists();
   };
 
+  const removeListItem = () => {
+    const itemID = model.state.itemID;
+    const listID = model.state.listID;
+    const listIndex = getListIndex(listID);
+    const itemIndex = getItemIndex({itemID});
+    model.lists[listIndex].listItems.splice(itemIndex, 1);
+    setLists();
+  };
+
   /** Update the position of an item (list or list item) in the DOM. Used to facilitate {@link module:dragAndDrop | drag and drop}.
    * @param {Object.<string>}
    * @param {string} id id of the list, or the item to be updated
@@ -387,6 +396,7 @@ const model = (function () {
     item,
     addList,
     removeList,
+    removeListItem,
     getList,
     getLists,
     state,

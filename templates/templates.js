@@ -116,6 +116,7 @@ const templates = (function () {
       id={%itemID%}
       class="list-item" 
       data-id={%itemID%} 
+      data-name={%itemName%}
       data-isdone="{%isDone%}"
       data-dom-pos={%domPos%}
       draggable="true"

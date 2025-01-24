@@ -270,6 +270,19 @@ const controller = (function () {
     });
   };
 
+  const deleteListItem = (target) => {
+    const dataSet = target.parentNode.parentNode.dataset;
+    const itemId = dataSet.id;
+    const name = dataSet.name;
+
+    if (!confirmDelete(name)) return;
+
+    const list = model.lists.find(l => l.listID === model.state.listID);
+    model.state.itemID = itemId;
+    model.removeListItem();
+    view.renderList({ list: list, DOMStrings: DOMStrings });
+  }
+
   /** Opens the three dot menu + writes isOpen state to the model
    * @see {module:model.state.update} -- write menu state to the model
    * @memberof module:controller
@@ -364,6 +377,9 @@ const controller = (function () {
           }
           if (e.target.classList.contains('control__back-to-overview')) {
             showOverview();
+          }
+          if (e.target.classList.contains('list-item__actions__delete')) {
+            deleteListItem(e.target);
           }
         }
       },
